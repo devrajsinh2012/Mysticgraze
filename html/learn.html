@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mystigraze - Learn</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+  
+    body {
+      background-color: #000000;
+    }
+
+    .navbar {
+      background-color: #343a40;
+    }
+
+    .page-header {
+      background: url('sign.png') no-repeat center center;
+      background-size: cover;
+      height: 300px;
+      position: relative;
+    }
+
+    .page-header:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: inherit;
+      width: inherit;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .page-header h1 {
+      color: #fff;
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+
+    .article-card {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .article-card:hover {
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .article-card img {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .video-card {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .video-card iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-card:hover {
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">Mystigraze</a>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1 class="display-4">Learn Astrology</h1>
+    </div>
+  </header>
+
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card article-card mb-4">
+            <img src="ar1.jpg" class="card-img-top" alt="Article 1">
+            <div class="card-body">
+              <h5 class="card-title">The Basics of Zodiac Signs</h5>
+              <p class="card-text">Learn about the 12 zodiac signs and their characteristics.</p>
+              <a href="https://www.allure.com/story/zodiac-sign-personality-traits-dates" class="btn btn-primary">Read Article</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card article-card mb-4">
+            <img src="ar2.jpg" class="card-img-top" alt="Article 2">
+            <div class="card-body">
+              <h5 class="card-title">Astrology and Relationships</h5>
+              <p class="card-text">Discover how astrology can help you navigate relationships.</p>
+              <a href="https://www.usatoday.com/story/news/2023/01/25/can-astrology-determine-relationship-longevity/11075471002/" class="btn btn-primary">Read Article</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card video-card mb-4">
+            <iframe src="https://www.youtube.com/embed/HBgjwWXxaBg?si=wKPNq0w6ZERCy4yf" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card video-card mb-4">
+            <iframe src="https://www.youtube.com/embed/LGfqQ_Oe3Oo?si=B1IY4x4nuR-aU3VI" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-dark text-white py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p>© 2023 Mystigraze. All rights reserved.</p>
+        </div>
+        <div class="col-md-6">
+          <ul class="list-inline text-md-right">
+            <li class="list-inline-item"><a href="#">Terms of Service</a></li>
+            <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarot Reading</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url("tr1.png") no-repeat center center fixed;
+      background-size: #fff;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+  max-width: 1500px;
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+    h1 {
+      margin-top: 0;
+      padding-top: 40px;
+      background: linear-gradient(to right, #ff00a6, #47a1ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #ff00a6;
+    }
+
+    select {
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffc107;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .predictions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .prediction {
+      width: 200px;
+      height: 200px;
+      margin: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .prediction h2 {
+      margin: 0;
+      padding: 10px;
+      background: linear-gradient(to right, #ffc107, #ff9800);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #ffc107;
+      border: none;
+      color: #000;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #ffcd36;
+    }
+
+    .home-link {
+      display: block;
+      margin-top: 40px;
+    }
+
+    .home-link a {
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(to right, #ffc107, #ff9800);
+      padding: 10px 20px;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .home-link a:hover {
+      background: #ffcd36;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Welcome to Tarot Reading</h1>
+    <label for="zodiac">Select Your Zodiac Sign:</label>
+    <select id="zodiac">
+      <option value="0" selected>Select</option>
+      <option value="Aries">Aries</option>
+      <option value="Taurus">Taurus</option>
+      <option value="Gemini">Gemini</option>
+      <option value="Cancer">Cancer</option>
+      <option value="Leo">Leo</option>
+      <option value="Virgo">Virgo</option>
+      <option value="Libra">Libra</option>
+      <option value="Scorpio">Scorpio</option>
+      <option value="Sagittarius">Sagittarius</option>
+      <option value="Capricorn">Capricorn</option>
+      <option value="Aquarius">Aquarius</option>
+      <option value="Pisces">Pisces</option>
+    </select>
+    <button id="submit">Get Tarot Reading</button>
+
+    <div class="predictions">
+      <div class="prediction" id="love-tarot">
+        <h2>Love</h2>
+      </div>
+      <div class="prediction" id="career-tarot">
+        <h2>Career</h2>
+      </div>
+      <div class="prediction" id="life-tarot">
+        <h2>Life</h2>
+      </div>
+    </div>
+
+ <div class="home-link">
+      <a href="../index/index.html">Home</a>
+    </div>
+  </div>
+  <script>
+    const zodiacSelect = document.getElementById('zodiac');
+    const submitButton = document.getElementById('submit');
+    const loveTarot = document.getElementById('love-tarot');
+    const careerTarot = document.getElementById('career-tarot');
+    const lifeTarot = document.getElementById('life-tarot');
+
+    submitButton.addEventListener('click', () => {
+      const selectedSign = zodiacSelect.value;
+
+      
+      switch (selectedSign) {
+        case "Aries":
+          loveTarot.innerHTML = "The Chariot brings a message of your fearless pursuit for love. This phase encourages boldness and independence in love. However, ensure to balance your life, don't rush into decisions unprepared.";
+          careerTarot.innerHTML = "King of Wands in the career field denotes dynamic energy and ambitious nature. Embrace upcoming challenges with courage and don't be afraid to innovate.";
+          lifeTarot.innerHTML = "Strength rules your life path indicating that your journey is filled with the courage and determination that an Aries is known for. Strive for balance and harmony in life.";
+          break;
+
+        case "Taurus":
+          loveTarot.innerHTML = "The Empress showers your love life with nurturing energies and emphasize comfort. It’s a sign to further nurture your current bonds and foster deeper connections.";
+          careerTarot.innerHTML = "The Page of Pentacles urges an investment of time in learning new skills, which may be fundamental to your career progress. Its focus is on growth, development, and learning.";
+          lifeTarot.innerHTML = "The Hierophant indicates a significant period where nurturing your spiritual self is critical. This phase is about reflection, self-development, and growth.";
+          break;
+
+        case "Gemini":
+          loveTarot.innerHTML = "The Lovers turns the spotlight on your relationships. Your communication skills are going to play a key role in maintaining harmony and strengthening bonds.";
+          careerTarot.innerHTML = "The Magician portrays your adaptable nature, reminding you to use your abilities for success. Your career path is filled with creativity, so cultivate multi-tasking skills.";
+          lifeTarot.innerHTML = "Temperance draws attention to maintaining balance in your chaotic life. It encourages integration of your dual nature and to find peace with it.";
+          break;
+
+        case "Cancer":
+          loveTarot.innerHTML = "The Queen of Cups suggests a phase where your emotional intelligence and intuition will play a crucial role in guiding your love life. Be open to embracing and expressing love.";
+          careerTarot.innerHTML = "The High Priestess is a calling to rely on your strong intuition and inner wisdom at your workplace. Trust your instincts in making decisions.";
+          lifeTarot.innerHTML = "The Moon amplifies periods of uncertainty. However, facing your fears while going through this phase will let you grow and enhance your emotional strength.";
+          break;
+
+        case "Leo":
+          loveTarot.innerHTML = "Strength Tarot reveals a period of passion and fostering courage in love matters. It encourages you to be brave and show your authentic emotional self.";
+          careerTarot.innerHTML = "The Sun Tarot shines brightly on your career, suggesting that your hard work and talent will flourish. Ensure to use your abilities to constructively shine in your field.";
+          lifeTarot.innerHTML = "The Emperor is a symbol of firm leadership and dominance signifying that it's time to take control of your life and the situations in it.";
+          break;
+
+        case "Virgo":
+          loveTarot.innerHTML = "The Hermit points towards a period of introspective solitude. Understand your emotional needs and desires to create a better love life.";
+          careerTarot.innerHTML = "The Eight of Pentacles spotlights your meticulousness and diligence. Attention to details will fetch you rewarding results in your career.";
+          lifeTarot.innerHTML = "The Wheel of Fortune brings periods of change. Agility and adaptability will help you throughout these wheels of change. Be receptive to twists and turns.";
+          break;
+
+        case "Libra":
+          loveTarot.innerHTML = "Justice Tarot reveals a time to uphold equilibrium in relationships. Balance fairness, impartiality, and harmony to make your love life smoother.";
+          careerTarot.innerHTML = "The Two of Swords indicates a significant career decision that needs attention. Weigh all your options thoroughly and tread carefully.";
+          lifeTarot.innerHTML = "The Star is bidding for optimism and hope. It's a sign that good times are imminent and the Universe is working in your favor. Hold on to your dreams.";
+          break;
+
+        case "Scorpio":
+          loveTarot.innerHTML = "Death Tarot evokes transformation in relationships. The old must end to let the new begin. Embrace changes, as they may lead to a more satisfying love life.";
+          careerTarot.innerHTML = "The Tower indicates unexpected changes at work. Your courage to face these upheavals will be crucial for your growth. Embrace the transformation.";
+          lifeTarot.innerHTML = "The Judgement Tarot heralds a period of awakening. It's time to reevaluate your life choices and assess what truly serves you.";
+          break;
+
+        case "Sagittarius":
+          loveTarot.innerHTML = "Temperance Tarot is a beacon of balance. Your relationships seek understanding, patience, and compromise. Make sure to think before acting.";
+          careerTarot.innerHTML = "With the Knight of Wands, you can anticipate rapid career progression. The task at hand demands dynamism, energy, and innovation.";
+          lifeTarot.innerHTML = "The Fool encourages you to take risks and venture into the unknown. Use your adventurous spirit to explore and embrace change in life.";
+          break;
+
+        case "Capricorn":
+          loveTarot.innerHTML = "The Devil Tarot warns you against clinging to suffocating relationships. Seek liberation and break free from what no longer serves you.";
+          careerTarot.innerHTML = "The King of Pentacles foresees economic success in your career. Direct your Capricornian focus and diligence towards your goals to achieve success.";
+          lifeTarot.innerHTML = "The World Tarot card suggests a period of satisfaction and completion. Savor the rewards of your hard work and relish in your achievements.";
+          break;
+
+        case "Aquarius":
+          loveTarot.innerHTML = "The Star illuminates your relationship with a ray of rejuvenation. Your bonds could use some positive energy, sprinkle in some optimism and trust.";
+          careerTarot.innerHTML = "The Ace of Swords signifies mental clarity in your career and encourages you to implement your innovative ideas. With hard work and dedication, you can achieve anything.";
+          lifeTarot.innerHTML = "The Hanged Man suggests you seeing things from a different perspective. Embrace change and be open to new ideas and ways of thinking.";
+          break;
+
+        case "Pisces":
+          loveTarot.innerHTML = "The Moon depicts an emotional journey in relationships. It's essential to follow your intuition and trust your instincts. Be honest about your feelings.";
+          careerTarot.innerHTML = "The Page of Cups urges you to be creative at work. Embrace your imaginative side and let it guide you through the toughest decisions.";
+          lifeTarot.innerHTML = "The High Priestess denotes a period of spiritual enlightenment. Use your intuition to gain clarity and perspective, and trust your gut in every situation.";
+          break;
+
+        default:
+
+      }
+    });
+  </script>
+</body>
+
+</html>

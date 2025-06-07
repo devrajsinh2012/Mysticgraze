@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horoscope</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+
+    body {
+      background: url("hobr.png") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 100px auto;
+      padding: 20px;
+      border-radius: 10px;
+     
+      box-shadow: transparent;
+    }
+
+    .form-title {
+      text-align: center;
+      font-size: 28px;
+      color: #22ff30;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 50px;
+    }
+
+    .form-control-label {
+      color: #dc00f5;
+      font-weight: bold;
+    }
+
+    .result-section {
+      background-color: rgba(255, 255, 19, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      display: none;
+    }
+
+    .result-title {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .result-description {
+      color: #666;
+      font-size: 16px;
+    }
+
+    @media (max-width: 800px) {
+      .container {
+        margin: 50px auto;
+        max-width: 90%;
+        padding: 80px;
+      }
+
+      .form-title {
+        font-size: 24px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .result-title {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .result-description {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="form-title">Horoscope</h1>
+    <form>
+      <div class="form-group">
+        <label class="form-control-label" for="day">Day</label>
+        <select class="form-control" id="day">
+          
+          <option disabled selected>Select Day</option>
+          
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-control-label" for="month">Month</label>
+        <select class="form-control" id="month">
+         
+          <option disabled selected>Select Month</option>
+          
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-control-label" for="year">Year</label>
+        <input type="number" class="form-control" id="year" placeholder="Enter year (1900-2020)">
+      </div>
+      <button type="button" class="btn btn-primary btn-block" onclick="getHoroscope()">Submit</button>
+    </form>
+    <div id="horoscopeResult" class="result-section">
+      <h4 class="result-title">Your Horoscope:</h4>
+      <h5 id="starName"></h5>
+      <p id="starDescription" class="result-description"></p>
+    </div>
+  </div>
+  <center>
+    <a href="../index/index.html" class="btn btn-primary">Home</a>
+  </center>
+  <script>
+   
+    var daySelect = document.getElementById("day");
+    for (var day = 1; day <= 31; day++) {
+      var option = document.createElement("option");
+      option.text = day;
+      daySelect.add(option);
+    }
+
+ 
+    var monthSelect = document.getElementById("month");
+    var months = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    for (var i = 0; i < months.length; i++) {
+      var option = document.createElement("option");
+      option.value = i + 1;
+      option.text = months[i];
+      monthSelect.add(option);
+    }
+
+    function getHoroscope() {
+     
+      var day = document.getElementById("day").value;
+      var month = document.getElementById("month").value;
+      var year = document.getElementById("year").value;
+
+      
+      if (year < 1800 || year > 2500) {
+        alert("Please enter a valid year between 1900 and 2020.");
+        return;
+      }
+
+
+      var horoscopeSigns = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra",
+        "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+      ];
+      var randomIndex = Math.floor(Math.random() * horoscopeSigns.length);
+      var horoscopeSign = horoscopeSigns[randomIndex];
+
+   
+      document.getElementById("starName").textContent = horoscopeSign;
+      document.getElementById("starDescription").textContent = getHoroscopeIntroduction(horoscopeSign);
+
+    
+      document.getElementById("horoscopeResult").style.display = "block";
+    }
+
+    function getHoroscopeIntroduction(horoscopeSign) {
+      
+      switch (horoscopeSign) {
+        case "Aries":
+          return "Aries is the first astrological sign in the zodiac. People born under this sign are often confident, dynamic, and ambitious.";
+        case "Taurus":
+          return "Taurus is an earth sign known for its groundedness and sensuality. Taureans are known to be reliable, practical, and determined.";
+        case "Gemini":
+          return "Gemini is an air sign, represented by the twins. Geminis are known for their adaptability, curiosity, and excellent communication skills.";
+        case "Cancer":
+          return "Cancer is a water sign, guided by their emotions. Individuals born under this sign are often nurturing, intuitive, and protective.";
+        case "Leo":
+          return "Leo is a fire sign, symbolized by the lion. Leos are natural-born leaders known for their charisma, warmth, and creative expression.";
+        case "Virgo":
+          return "Virgo is an earth sign, known for its attention to detail and analytical nature. Virgos are often practical, hardworking, and reliable.";
+        case "Libra":
+          return "Libra is an air sign, symbolized by the scales. Librans are known for their diplomatic nature, sense of justice, and harmonious personality.";
+        case "Scorpio":
+          return "Scorpio is a water sign associated with intensity and passion. Scorpios are often resourceful, determined, and have a magnetic presence.";
+        case "Sagittarius":
+          return "Sagittarius is a fire sign and known for its adventurous spirit. Sagittarians are optimistic, open-minded, and have a love for exploration.";
+        case "Capricorn":
+          return "Capricorn is an earth sign, represented by the sea-goat. Capricorns are often disciplined, responsible, and have a strong work ethic.";
+        case "Aquarius":
+          return "Aquarius is an air sign, known for its uniqueness and independent nature. Aquarians are often visionary, humanitarian, and intellectually inclined.";
+        case "Pisces":
+          return "Pisces is a water sign symbolized by two fish swimming in opposite directions. Pisceans are often compassionate, intuitive, and artistic.";
+        default:
+          return "";
+      }
+    }
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

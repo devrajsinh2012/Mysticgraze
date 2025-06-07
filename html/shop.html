@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astrogy Shop </title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background-color: #3498db;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    main {
+      text-align: center;
+      padding: 20px;
+    }
+    .carousel-item {
+      transition: transform 0.5s;
+    }
+    .carousel-item.active {
+      transform: translateX(0);
+    }
+    .carousel-item.next {
+      transform: translateX(100%);
+    }
+    .carousel-item.prev {
+      transform: translateX(-100%);
+    }
+    .carousel-indicators li {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+    .carousel-indicators .active {
+      background-color: #fff;
+    }
+    .product {
+      background: none; 
+      padding: 10px;
+      margin: 30px;
+      display: inline-block;
+      width: 500px;
+    }
+    .carousel-inner>.carousel-item>.product> img {
+      height: 500px; 
+      width: 500px;
+      vertical-align: middle;
+     
+    }
+    .carousel-caption {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+     margin-top: 50%;
+    
+    }
+    .carousel-caption h3,
+    .carousel-caption p {
+      color: #fff;
+    }
+    .carousel-caption p {
+      margin-bottom: 0;
+    }
+    .carousel-caption button {
+      margin-top: 10px;
+    }
+    .btn-primary {
+      background-color: #ffc107;
+      border-color: #ffc107;
+    }
+    .btn-primary:hover {
+      background-color: #ffcd36;
+      border-color: #ffcd36;
+    }
+    .home-button {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Welcome to Astrogy Shop - Your Destination for Unique Jewelry</h1>
+  </header>
+
+  <main>
+    <div id="productSlider" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#productSlider" data-slide-to="0" class="active"></li>
+        <li data-target="#productSlider" data-slide-to="1"></li>
+        <li data-target="#productSlider" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="product">
+            <img src="sh22.png" alt="Bracelet 1">
+          </div>
+          <div class="carousel-caption">
+            <h3>Bracelet </h3>
+            <p>An elegant bracelet to enhance your style. Made with love and care.</p>
+            <p>Price: $29.99</p>
+            <button class="btn btn-primary">Add to Cart</button>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="product">
+            <img src="sh55.png" alt="Necklace">
+          </div>
+          <div class="carousel-caption">
+            <h3>Necklace</h3>
+            <p>A beautiful necklace that complements your outfit. Handcrafted for perfection.</p>
+            <p>Price: $49.99</p>
+            <button class="btn btn-primary">Add to Cart</button>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="product">
+            <img src="sh57.png" alt="Earring">
+          </div>
+          <div class="carousel-caption">
+            <h3>Earring</h3>
+            <p>Elevate your look with these exquisite earrings. A perfect addition to your jewelry collection.</p>
+            <p>Price: $19.99</p>
+            <button class="btn btn-primary">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#productSlider" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#productSlider" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </main>
+  <a href="../index/index.html" class="btn btn-primary home-button">Home</a>
+
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>  
