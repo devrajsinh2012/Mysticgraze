@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MysticGraze.com</title>
+    <title>MysticGraze - Unlock the Secrets of the Cosmos</title>
+    <meta name="description" content="Explore astrology, horoscopes, natal charts, and tarot readings. Your journey through the celestial mysteries begins here.">
 
     <!-- ✅ Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
@@ -13,62 +14,204 @@
     <link rel="stylesheet" href="phone.css" media="only screen and (max-width: 768px)">
 
     <!-- ✅ Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai|Bree+Serif&display=swap" rel="stylesheet">
-
-    <style>
-        h1 {
-            color: aqua;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <!-- Loading Animation -->
+    <div id="loader" class="loader">
+        <div class="constellation-loader">
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+        </div>
+    </div>
 
     <nav id="navbar">
+        <div class="logo">
+            <i class="fas fa-moon"></i>
+            <span>MysticGraze</span>
+        </div>
         <ul>
-            <li class="item"><a href="html/horo2.html">Horoscope</a></li>
-            <li class="item"><a href="html/learn.html">Learn</a></li>
-            <li class="item"><a href="html/tarot.html">Tarot</a></li>
-            <li class="item"><a href="html/shop.html">Shop</a></li>
+            <li class="item"><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+            <li class="item"><a href="html/horo2.html"><i class="fas fa-star"></i> Horoscope</a></li>
+            <li class="item"><a href="html/learn.html"><i class="fas fa-book"></i> Learn</a></li>
+            <li class="item"><a href="html/tarot.html"><i class="fas fa-magic"></i> Tarot</a></li>
+            <li class="item"><a href="html/shop.html"><i class="fas fa-shopping-bag"></i> Shop</a></li>
         </ul>
     </nav>
 
     <section id="home">
-        <h1 class="h-primary">Welcome to MysticGraze</h1>
-        <p>Unlock the Secrets of the Cosmos with Our Astrology Knowledge.</p>
-        <p>Explore the Mysteries of the Stars and Planets.</p>
-        <a href="html/sign.html"><button class="btn"> Discover Now</button></a>
+        <div class="stars"></div>
+        <div class="twinkling"></div>
+        <div class="home-content">
+            <h1 class="h-primary fade-in">Welcome to MysticGraze</h1>
+            <p class="subtitle fade-in-delay-1">Unlock the Secrets of the Cosmos with Ancient Wisdom</p>
+            <p class="subtitle fade-in-delay-2">Explore the Mysteries of the Stars and Planets</p>
+            <div class="zodiac-symbols fade-in-delay-3">
+                <span>♈</span> <span>♉</span> <span>♊</span> <span>♋</span> 
+                <span>♌</span> <span>♍</span> <span>♎</span> <span>♏</span> 
+                <span>♐</span> <span>♑</span> <span>♒</span> <span>♓</span>
+            </div>
+            <a href="html/sign.html" class="btn fade-in-delay-4">
+                <span>Discover Your Destiny</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
     </section>
 
     <section id="services-container">
-        <h1 class="h-primary center">Our Astrology Works</h1>
+        <h1 class="h-primary center">Our Mystical Services</h1>
+        <p class="section-subtitle">Discover the cosmic guidance you seek</p>
         <div id="services">
             <div class="box">
-                <img src="nt.jpg" alt="">
+                <div class="box-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <img src="nt.jpg" alt="Natal Chart Readings">
                 <h2 class="h-secondary center">Natal Chart Readings</h2>
                 <p class="center">Delve into the depths of your birth chart to gain insights into your life's path, personality, and potential. Discover how the planets and stars influence your destiny.</p>
+                <div class="card-footer">
+                    <a href="html/horo2.html" class="learn-more">Learn More →</a>
+                </div>
             </div>
             <div class="box">
-                <img src="ho1.jpg" alt="">
+                <div class="box-icon">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <img src="ho1.jpg" alt="Horoscope Predictions">
                 <h2 class="h-secondary center">Horoscope Predictions</h2>
                 <p class="center">Receive daily, weekly, and monthly horoscopes that guide you through life's challenges and opportunities. Know the cosmic forces at play in your life.</p>
+                <div class="card-footer">
+                    <a href="html/horo2.html" class="learn-more">Learn More →</a>
+                </div>
             </div>
             <div class="box">
-                <img src="le1.jpg" alt="">
+                <div class="box-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <img src="le1.jpg" alt="Astrology Workshops">
                 <h2 class="h-secondary center">Astrology Workshops</h2>
                 <p class="center">Join our astrology workshops and seminars to expand your knowledge of the celestial world. Learn from renowned astrologers and stargazers.</p>
+                <div class="card-footer">
+                    <a href="html/learn.html" class="learn-more">Learn More →</a>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="client-section">
-        <h1 class="h-primary center">Our Astrologers</h1>
+        <h1 class="h-primary center">Our Expert Astrologers</h1>
+        <p class="section-subtitle">Guided by the stars, serving with wisdom</p>
         <div id="clients">
-            <div class="client-item"><img src="at1.png" alt="Astrologer 1"></div>
-            <div class="client-item"><img src="at2.png" alt="Astrologer 2"></div>
-            <div class="client-item"><img src="at3.png" alt="Astrologer 3"></div>
-            <div class="client-item"><img src="at4.png" alt="Astrologer 4"></div>
+            <div class="client-item">
+                <img src="at1.png" alt="Master Astrologer">
+                <div class="client-overlay">
+                    <h3>Master Reader</h3>
+                    <p>15+ Years Experience</p>
+                </div>
+            </div>
+            <div class="client-item">
+                <img src="at2.png" alt="Vedic Astrologer">
+                <div class="client-overlay">
+                    <h3>Vedic Expert</h3>
+                    <p>Ancient Wisdom</p>
+                </div>
+            </div>
+            <div class="client-item">
+                <img src="at3.png" alt="Tarot Master">
+                <div class="client-overlay">
+                    <h3>Tarot Master</h3>
+                    <p>Intuitive Guidance</p>
+                </div>
+            </div>
+            <div class="client-item">
+                <img src="at4.png" alt="Celestial Guide">
+                <div class="client-overlay">
+                    <h3>Celestial Guide</h3>
+                    <p>Spiritual Advisor</p>
+                </div>
+            </div>
         </div>
     </section>
 
+    <section id="contact">
+        <h1 class="h-primary center">Connect With The Cosmos</h1>
+        <p class="section-subtitle">Get personalized readings and guidance</p>
+        <div id="contact-box">
+            <form>
+                <div class="form-group">
+                    <label for="name"><i class="fas fa-user"></i> Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="birthdate"><i class="fas fa-calendar"></i> Birth Date</label>
+                    <input type="date" id="birthdate" name="birthdate">
+                </div>
+                <div class="form-group">
+                    <label for="message"><i class="fas fa-comment"></i> Message</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Tell us about your cosmic inquiry..."></textarea>
+                </div>
+                <button type="submit" class="btn">
+                    <span>Send Message</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-moon"></i> MysticGraze</h3>
+                <p>Your gateway to cosmic wisdom and celestial guidance.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="html/horo2.html">Horoscope</a></li>
+                    <li><a href="html/tarot.html">Tarot Reading</a></li>
+                    <li><a href="html/learn.html">Learn Astrology</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Services</h3>
+                <ul>
+                    <li><a href="#">Birth Chart Analysis</a></li>
+                    <li><a href="#">Compatibility Reports</a></li>
+                    <li><a href="#">Personalized Readings</a></li>
+                    <li><a href="html/shop.html">Shop</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-envelope"></i> info@mysticgraze.com</li>
+                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Cosmic Realm</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MysticGraze. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

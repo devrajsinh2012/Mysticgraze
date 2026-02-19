@@ -116,7 +116,7 @@
     </div>
   </div>
   <center>
-    <a href="../index/index.html" class="btn btn-primary">Home</a>
+    <a href="../index.html" class="btn btn-primary">Home</a>
   </center>
   <script>
    
@@ -140,30 +140,48 @@
     }
 
     function getHoroscope() {
-     
-      var day = document.getElementById("day").value;
-      var month = document.getElementById("month").value;
-      var year = document.getElementById("year").value;
+      // Get form values
+      var day = parseInt(document.getElementById("day").value);
+      var month = parseInt(document.getElementById("month").value);
+      var year = parseInt(document.getElementById("year").value);
 
-      
-      if (year < 1800 || year > 2500) {
-        alert("Please enter a valid year between 1900 and 2020.");
+      // Validate inputs
+      if (!day || !month || !year) {
+        alert("Please fill in all fields.");
         return;
       }
 
+      if (year < 1800 || year > 2500) {
+        alert("Please enter a valid year between 1800 and 2500.");
+        return;
+      }
 
-      var horoscopeSigns = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra",
-        "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
-      ];
-      var randomIndex = Math.floor(Math.random() * horoscopeSigns.length);
-      var horoscopeSign = horoscopeSigns[randomIndex];
+      // Calculate zodiac sign based on birth date
+      var horoscopeSign = getZodiacSign(day, month);
 
-   
+      // Display results
       document.getElementById("starName").textContent = horoscopeSign;
       document.getElementById("starDescription").textContent = getHoroscopeIntroduction(horoscopeSign);
 
-    
+      // Show result section
       document.getElementById("horoscopeResult").style.display = "block";
+    }
+
+    // Function to determine zodiac sign based on day and month
+    function getZodiacSign(day, month) {
+      if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return "Aries";
+      if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return "Taurus";
+      if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return "Gemini";
+      if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return "Cancer";
+      if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return "Leo";
+      if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return "Virgo";
+      if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return "Libra";
+      if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return "Scorpio";
+      if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return "Sagittarius";
+      if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return "Capricorn";
+      if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return "Aquarius";
+      if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return "Pisces";
+      return "Unknown";
     }
 
     function getHoroscopeIntroduction(horoscopeSign) {
