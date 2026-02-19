@@ -1,125 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Horoscope</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>MysticGraze - Horoscope</title>
+  <meta name="description" content="Discover your zodiac sign, personality traits, and cosmic guidance based on your birth date.">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --navbar-height: 70px;
+      --primary-color: #9d4edd;
+      --secondary-color: #c77dff;
+      --accent-color: #e0aaff;
+      --dark-bg: #10002b;
+      --darker-bg: #240046;
+      --light-text: #ffffff;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    }
 
     body {
-      background: url("hobr.png") no-repeat center center fixed;
-      background-size: cover;
+      font-family: 'Raleway', sans-serif;
+      background: var(--dark-bg);
+      color: var(--light-text);
+      overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    .container {
-      max-width: 400px;
-      margin: 100px auto;
-      padding: 20px;
-      border-radius: 10px;
-     
-      box-shadow: transparent;
+    /* Stars */
+    .stars-bg {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+    .star-dot {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--dur) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.2); }
     }
 
-    .form-title {
-      text-align: center;
-      font-size: 28px;
-      color: #22ff30;
-      margin-bottom: 20px;
+    /* Navbar */
+    #navbar {
+      display: flex; align-items: center; justify-content: space-between;
+      position: fixed; top: 0; left: 0; right: 0;
+      padding: 0 5%; height: var(--navbar-height);
+      backdrop-filter: blur(10px);
+      background: rgba(16, 0, 43, 0.85);
+      border-bottom: 1px solid rgba(157, 78, 221, 0.3);
+      z-index: 1000;
+    }
+    #navbar .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700;
+      color: var(--accent-color); text-transform: uppercase; letter-spacing: 2px;
+      text-decoration: none;
+    }
+    #navbar .logo i { font-size: 2rem; color: var(--secondary-color); animation: rotateMoon 20s linear infinite; }
+    @keyframes rotateMoon { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    #navbar ul { display: flex; gap: 10px; list-style: none; }
+    #navbar ul li a {
+      color: var(--accent-color); display: flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 25px; text-decoration: none;
+      font-size: 1rem; font-weight: 500; transition: all 0.3s ease;
+      position: relative; overflow: hidden;
+    }
+    #navbar ul li a::before {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%; background: var(--gradient-1);
+      transition: left 0.3s ease; z-index: -1;
+    }
+    #navbar ul li a:hover::before { left: 0; }
+    #navbar ul li a:hover { color: white; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4); }
+    #navbar ul li a.active::before { left: 0; }
+    #navbar ul li a.active { color: white; }
+
+    .nav-toggle { display: none; background: none; border: none; color: var(--accent-color); font-size: 1.5rem; cursor: pointer; }
+
+    /* Page Content */
+    .page-content {
+      position: relative; z-index: 1;
+      padding-top: calc(var(--navbar-height) + 30px);
+      min-height: 100vh;
     }
 
+    /* Hero */
+    .hero-section {
+      text-align: center; padding: 40px 20px 20px;
+    }
+    .hero-section h1 {
+      font-family: 'Cinzel', serif; font-size: 2.8rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-color), var(--secondary-color), var(--primary-color));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 10px;
+    }
+    .hero-section p {
+      color: var(--accent-color); font-size: 1.1rem; opacity: 0.8;
+      font-family: 'Playfair Display', serif; font-style: italic;
+    }
+
+    /* Glass Card */
+    .glass-card {
+      background: rgba(36, 0, 70, 0.5);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(157, 78, 221, 0.25);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Form Section */
+    .form-section {
+      max-width: 520px; margin: 30px auto; padding: 0 20px;
+    }
+    .form-section .glass-card { text-align: center; }
+    .form-section h2 {
+      font-family: 'Cinzel', serif; font-size: 1.5rem;
+      color: var(--accent-color); margin-bottom: 25px;
+    }
+    .form-row {
+      display: flex; gap: 12px; margin-bottom: 20px;
+    }
     .form-group {
-      margin-bottom: 50px;
+      flex: 1; text-align: left;
+    }
+    .form-group label {
+      display: block; font-size: 0.85rem; color: var(--secondary-color);
+      margin-bottom: 6px; font-weight: 500;
+    }
+    .form-group select,
+    .form-group input {
+      width: 100%; padding: 12px 14px;
+      background: rgba(16, 0, 43, 0.7);
+      border: 1px solid rgba(157, 78, 221, 0.35);
+      border-radius: 10px; color: var(--light-text);
+      font-family: 'Raleway', sans-serif; font-size: 0.95rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      appearance: none; -webkit-appearance: none;
+    }
+    .form-group select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c77dff' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    .form-group select:focus,
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 12px rgba(157, 78, 221, 0.3);
+    }
+    .form-group select option { background: var(--darker-bg); color: var(--light-text); }
+
+    .btn-cosmic {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 40px; border: none; border-radius: 30px;
+      background: var(--gradient-1); color: white;
+      font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease;
+      letter-spacing: 1px; margin-top: 10px;
+    }
+    .btn-cosmic:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(157, 78, 221, 0.5);
     }
 
-    .form-control-label {
-      color: #dc00f5;
-      font-weight: bold;
-    }
-
+    /* Result Section */
     .result-section {
-      background-color: rgba(255, 255, 19, 0.9);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      max-width: 700px; margin: 40px auto; padding: 0 20px;
       display: none;
     }
-
-    .result-title {
-      color: #333;
-      margin-bottom: 10px;
+    .result-section.visible {
+      display: block;
+      animation: resultReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes resultReveal {
+      from { opacity: 0; transform: translateY(40px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    .result-description {
-      color: #666;
-      font-size: 16px;
+    .result-header { text-align: center; margin-bottom: 30px; }
+    .zodiac-symbol-large {
+      font-size: 5rem; display: block; margin-bottom: 8px;
+      animation: symbolFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(157, 78, 221, 0.6));
+    }
+    @keyframes symbolFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .result-sign-name {
+      font-family: 'Cinzel', serif; font-size: 2.4rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .result-date-range {
+      color: var(--secondary-color); font-size: 0.95rem;
+      font-family: 'Playfair Display', serif; font-style: italic; margin-top: 4px;
     }
 
-    @media (max-width: 800px) {
-      .container {
-        margin: 50px auto;
-        max-width: 90%;
-        padding: 80px;
-      }
+    .result-meta {
+      display: flex; justify-content: center; gap: 20px;
+      flex-wrap: wrap; margin: 20px 0 25px;
+    }
+    .meta-badge {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 18px; border-radius: 20px;
+      background: rgba(157, 78, 221, 0.15);
+      border: 1px solid rgba(157, 78, 221, 0.3);
+      font-size: 0.9rem;
+    }
+    .meta-badge i { color: var(--secondary-color); }
+    .meta-badge span { color: var(--accent-color); }
 
-      .form-title {
-        font-size: 24px;
-      }
+    .traits-section { margin: 20px 0; }
+    .traits-section h3 {
+      font-family: 'Cinzel', serif; font-size: 1.1rem;
+      color: var(--secondary-color); margin-bottom: 12px;
+    }
+    .traits-list { display: flex; flex-wrap: wrap; gap: 10px; }
+    .trait-tag {
+      padding: 6px 16px; border-radius: 20px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.25), rgba(118, 75, 162, 0.25));
+      border: 1px solid rgba(157, 78, 221, 0.3);
+      font-size: 0.85rem; color: var(--accent-color);
+    }
 
-      .form-group {
-        margin-bottom: 15px;
-      }
+    .description-section { margin: 25px 0; }
+    .description-section h3 {
+      font-family: 'Cinzel', serif; font-size: 1.1rem;
+      color: var(--secondary-color); margin-bottom: 10px;
+    }
+    .description-section p {
+      line-height: 1.7; color: rgba(255, 255, 255, 0.85); font-size: 0.95rem;
+    }
 
-      .result-title {
-        font-size: 20px;
-        margin-bottom: 5px;
-      }
+    .lucky-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+      margin: 25px 0;
+    }
+    .lucky-item {
+      text-align: center; padding: 18px 12px; border-radius: 14px;
+      background: rgba(16, 0, 43, 0.5);
+      border: 1px solid rgba(157, 78, 221, 0.2);
+    }
+    .lucky-item .lucky-label {
+      display: block; font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--secondary-color); margin-bottom: 6px;
+    }
+    .lucky-item .lucky-value {
+      font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--accent-color);
+    }
 
-      .result-description {
-        font-size: 14px;
+    .compatibility-section { margin: 25px 0; }
+    .compatibility-section h3 {
+      font-family: 'Cinzel', serif; font-size: 1.1rem;
+      color: var(--secondary-color); margin-bottom: 10px;
+    }
+    .compat-signs { display: flex; gap: 12px; flex-wrap: wrap; }
+    .compat-tag {
+      padding: 8px 16px; border-radius: 20px;
+      background: rgba(224, 170, 255, 0.1);
+      border: 1px solid rgba(224, 170, 255, 0.25);
+      font-size: 0.9rem; color: var(--accent-color);
+    }
+
+    .insight-section {
+      margin-top: 25px; padding: 20px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(157, 78, 221, 0.12));
+      border: 1px solid rgba(157, 78, 221, 0.25);
+      text-align: center;
+    }
+    .insight-section h3 {
+      font-family: 'Cinzel', serif; font-size: 1rem;
+      color: var(--secondary-color); margin-bottom: 10px;
+    }
+    .insight-section p {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      color: var(--accent-color); line-height: 1.6; font-size: 0.95rem;
+    }
+
+    /* Zodiac Grid */
+    .zodiac-grid-section {
+      max-width: 900px; margin: 50px auto 40px; padding: 0 20px;
+      text-align: center;
+    }
+    .zodiac-grid-section h2 {
+      font-family: 'Cinzel', serif; font-size: 1.6rem;
+      color: var(--accent-color); margin-bottom: 8px;
+    }
+    .zodiac-grid-section .subtitle {
+      color: var(--secondary-color); font-size: 0.95rem;
+      margin-bottom: 30px; opacity: 0.8;
+    }
+    .zodiac-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    }
+    .zodiac-card {
+      padding: 22px 12px; border-radius: 16px;
+      background: rgba(36, 0, 70, 0.4);
+      border: 1px solid rgba(157, 78, 221, 0.2);
+      cursor: pointer; transition: all 0.3s ease; text-align: center;
+    }
+    .zodiac-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--secondary-color);
+      box-shadow: 0 8px 30px rgba(157, 78, 221, 0.3);
+      background: rgba(36, 0, 70, 0.65);
+    }
+    .zodiac-card .zc-symbol { font-size: 2.2rem; display: block; margin-bottom: 6px; }
+    .zodiac-card .zc-name {
+      font-family: 'Cinzel', serif; font-size: 0.85rem;
+      color: var(--accent-color); margin-bottom: 2px;
+    }
+    .zodiac-card .zc-dates {
+      font-size: 0.7rem; color: var(--secondary-color); opacity: 0.7;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 60px; border-top: 1px solid rgba(157, 78, 221, 0.2);
+      background: rgba(16, 0, 43, 0.6); position: relative; z-index: 1;
+    }
+    .footer-content {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;
+      max-width: 1200px; margin: 0 auto; padding: 50px 20px 30px;
+    }
+    .footer-section h3 {
+      font-family: 'Cinzel', serif; font-size: 1.1rem;
+      color: var(--accent-color); margin-bottom: 15px;
+    }
+    .footer-section p, .footer-section li {
+      color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; line-height: 1.8;
+    }
+    .footer-section ul { list-style: none; }
+    .footer-section ul li a {
+      color: rgba(255, 255, 255, 0.6); text-decoration: none; transition: color 0.3s;
+    }
+    .footer-section ul li a:hover { color: var(--accent-color); }
+    .social-links { display: flex; gap: 12px; margin-top: 12px; }
+    .social-links a {
+      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; background: rgba(157, 78, 221, 0.15);
+      border: 1px solid rgba(157, 78, 221, 0.3);
+      color: var(--accent-color); text-decoration: none; transition: all 0.3s;
+    }
+    .social-links a:hover {
+      background: var(--primary-color); color: white; transform: translateY(-3px);
+    }
+    .footer-bottom {
+      text-align: center; padding: 20px;
+      border-top: 1px solid rgba(157, 78, 221, 0.15);
+      font-size: 0.85rem; color: rgba(255, 255, 255, 0.4);
+    }
+    .footer-bottom a { color: var(--secondary-color); text-decoration: none; }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      #navbar ul { display: none; }
+      #navbar ul.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: var(--navbar-height); left: 0; right: 0;
+        background: rgba(16, 0, 43, 0.95); padding: 20px;
+        border-bottom: 1px solid rgba(157, 78, 221, 0.3);
       }
+      .nav-toggle { display: block; }
+      .hero-section h1 { font-size: 2rem; }
+      .form-row { flex-direction: column; }
+      .glass-card { padding: 25px; }
+      .zodiac-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .lucky-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .footer-content { grid-template-columns: repeat(2, 1fr); }
+      .result-sign-name { font-size: 1.8rem; }
+      .zodiac-symbol-large { font-size: 3.5rem; }
+    }
+    @media (max-width: 480px) {
+      .zodiac-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-content { grid-template-columns: 1fr; }
+      .meta-badge { font-size: 0.8rem; padding: 6px 12px; }
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1 class="form-title">Horoscope</h1>
-    <form>
-      <div class="form-group">
-        <label class="form-control-label" for="day">Day</label>
-        <select class="form-control" id="day">
-          
-          <option disabled selected>Select Day</option>
-          
-        </select>
+
+  <!-- Stars Background -->
+  <div class="stars-bg" id="starsBg"></div>
+
+  <!-- Navbar -->
+  <nav id="navbar">
+    <a href="../index.html" class="logo">
+      <i class="fas fa-moon"></i>
+      <span>MysticGraze</span>
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('#navbar ul').classList.toggle('open')" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul>
+      <li class="item"><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li class="item"><a href="horo2.html" class="active"><i class="fas fa-star"></i> Horoscope</a></li>
+      <li class="item"><a href="learn.html"><i class="fas fa-book"></i> Learn</a></li>
+      <li class="item"><a href="tarot.html"><i class="fas fa-magic"></i> Tarot</a></li>
+      <li class="item"><a href="shop.html"><i class="fas fa-shopping-bag"></i> Shop</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-content">
+
+    <!-- Hero -->
+    <div class="hero-section">
+      <h1>Discover Your Zodiac Sign</h1>
+      <p>Enter your birth date and unlock cosmic insights about your celestial identity</p>
+    </div>
+
+    <!-- Form -->
+    <div class="form-section">
+      <div class="glass-card">
+        <h2><i class="fas fa-calendar-alt"></i> Enter Your Birth Date</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="day">Day</label>
+            <select id="day"><option disabled selected>Day</option></select>
+          </div>
+          <div class="form-group">
+            <label for="month">Month</label>
+            <select id="month"><option disabled selected>Month</option></select>
+          </div>
+          <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" id="year" placeholder="e.g. 1995" min="1800" max="2500">
+          </div>
+        </div>
+        <button type="button" class="btn-cosmic" onclick="getHoroscope()">
+          <i class="fas fa-stars"></i> Reveal My Sign
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
-      <div class="form-group">
-        <label class="form-control-label" for="month">Month</label>
-        <select class="form-control" id="month">
-         
-          <option disabled selected>Select Month</option>
-          
-        </select>
+    </div>
+
+    <!-- Result -->
+    <div class="result-section" id="horoscopeResult">
+      <div class="glass-card">
+        <div class="result-header">
+          <span class="zodiac-symbol-large" id="resultSymbol"></span>
+          <div class="result-sign-name" id="resultSignName"></div>
+          <div class="result-date-range" id="resultDateRange"></div>
+        </div>
+        <div class="result-meta" id="resultMeta"></div>
+        <div class="traits-section">
+          <h3><i class="fas fa-fingerprint"></i> Personality Traits</h3>
+          <div class="traits-list" id="resultTraits"></div>
+        </div>
+        <div class="description-section">
+          <h3><i class="fas fa-scroll"></i> About Your Sign</h3>
+          <p id="resultDescription"></p>
+        </div>
+        <div class="lucky-grid" id="resultLucky"></div>
+        <div class="compatibility-section">
+          <h3><i class="fas fa-heart"></i> Best Compatibility</h3>
+          <div class="compat-signs" id="resultCompat"></div>
+        </div>
+        <div class="insight-section">
+          <h3><i class="fas fa-sparkles"></i> Daily Cosmic Insight</h3>
+          <p id="resultInsight"></p>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-control-label" for="year">Year</label>
-        <input type="number" class="form-control" id="year" placeholder="Enter year (1900-2020)">
-      </div>
-      <button type="button" class="btn btn-primary btn-block" onclick="getHoroscope()">Submit</button>
-    </form>
-    <div id="horoscopeResult" class="result-section">
-      <h4 class="result-title">Your Horoscope:</h4>
-      <h5 id="starName"></h5>
-      <p id="starDescription" class="result-description"></p>
+    </div>
+
+    <!-- Zodiac Grid -->
+    <div class="zodiac-grid-section">
+      <h2>Explore All Zodiac Signs</h2>
+      <p class="subtitle">Click any sign to discover its secrets</p>
+      <div class="zodiac-grid" id="zodiacGrid"></div>
     </div>
   </div>
-  <center>
-    <a href="../index.html" class="btn btn-primary">Home</a>
-  </center>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3><i class="fas fa-moon"></i> MysticGraze</h3>
+        <p>Your gateway to cosmic wisdom and celestial guidance.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="horo2.html">Horoscope</a></li>
+          <li><a href="tarot.html">Tarot Reading</a></li>
+          <li><a href="learn.html">Learn Astrology</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Services</h3>
+        <ul>
+          <li><a href="#">Birth Chart Analysis</a></li>
+          <li><a href="#">Compatibility Reports</a></li>
+          <li><a href="#">Personalized Readings</a></li>
+          <li><a href="shop.html">Shop</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <ul>
+          <li><i class="fas fa-envelope"></i> info@mysticgraze.com</li>
+          <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+          <li><i class="fas fa-map-marker-alt"></i> Cosmic Realm</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 MysticGraze. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+  </footer>
+
   <script>
-   
+    // Generate starry background
+    (function() {
+      var bg = document.getElementById('starsBg');
+      for (var i = 0; i < 120; i++) {
+        var s = document.createElement('div');
+        s.className = 'star-dot';
+        var size = Math.random() * 2.5 + 0.5;
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        s.style.setProperty('--dur', (Math.random() * 3 + 2) + 's');
+        s.style.animationDelay = (Math.random() * 5) + 's';
+        bg.appendChild(s);
+      }
+    })();
+
+    // Populate day/month selects
     var daySelect = document.getElementById("day");
     for (var day = 1; day <= 31; day++) {
       var option = document.createElement("option");
@@ -127,7 +549,6 @@
       daySelect.add(option);
     }
 
- 
     var monthSelect = document.getElementById("month");
     var months = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
@@ -139,35 +560,23 @@
       monthSelect.add(option);
     }
 
-    function getHoroscope() {
-      // Get form values
-      var day = parseInt(document.getElementById("day").value);
-      var month = parseInt(document.getElementById("month").value);
-      var year = parseInt(document.getElementById("year").value);
+    // Zodiac data
+    var zodiacData = {
+      Aries:       { symbol: "\u2648", dates: "Mar 21 \u2013 Apr 19", element: "Fire", elementIcon: "fa-fire", planet: "Mars", traits: ["Confident", "Dynamic", "Ambitious", "Courageous"], lucky: { numbers: "9, 18, 27", color: "Red", day: "Tuesday" }, compat: ["Leo", "Sagittarius", "Gemini"] },
+      Taurus:      { symbol: "\u2649", dates: "Apr 20 \u2013 May 20", element: "Earth", elementIcon: "fa-mountain", planet: "Venus", traits: ["Reliable", "Practical", "Determined", "Sensual"], lucky: { numbers: "6, 15, 24", color: "Green", day: "Friday" }, compat: ["Virgo", "Capricorn", "Cancer"] },
+      Gemini:      { symbol: "\u264A", dates: "May 21 \u2013 Jun 20", element: "Air", elementIcon: "fa-wind", planet: "Mercury", traits: ["Adaptable", "Curious", "Communicative", "Witty"], lucky: { numbers: "5, 14, 23", color: "Yellow", day: "Wednesday" }, compat: ["Libra", "Aquarius", "Aries"] },
+      Cancer:      { symbol: "\u264B", dates: "Jun 21 \u2013 Jul 22", element: "Water", elementIcon: "fa-water", planet: "Moon", traits: ["Nurturing", "Intuitive", "Protective", "Loyal"], lucky: { numbers: "2, 11, 20", color: "Silver", day: "Monday" }, compat: ["Scorpio", "Pisces", "Taurus"] },
+      Leo:         { symbol: "\u264C", dates: "Jul 23 \u2013 Aug 22", element: "Fire", elementIcon: "fa-fire", planet: "Sun", traits: ["Charismatic", "Warm", "Creative", "Generous"], lucky: { numbers: "1, 10, 19", color: "Gold", day: "Sunday" }, compat: ["Aries", "Sagittarius", "Libra"] },
+      Virgo:       { symbol: "\u264D", dates: "Aug 23 \u2013 Sep 22", element: "Earth", elementIcon: "fa-mountain", planet: "Mercury", traits: ["Analytical", "Hardworking", "Reliable", "Modest"], lucky: { numbers: "5, 14, 23", color: "Navy Blue", day: "Wednesday" }, compat: ["Taurus", "Capricorn", "Cancer"] },
+      Libra:       { symbol: "\u264E", dates: "Sep 23 \u2013 Oct 22", element: "Air", elementIcon: "fa-wind", planet: "Venus", traits: ["Diplomatic", "Harmonious", "Fair-minded", "Social"], lucky: { numbers: "6, 15, 24", color: "Pink", day: "Friday" }, compat: ["Gemini", "Aquarius", "Leo"] },
+      Scorpio:     { symbol: "\u264F", dates: "Oct 23 \u2013 Nov 21", element: "Water", elementIcon: "fa-water", planet: "Pluto", traits: ["Resourceful", "Determined", "Passionate", "Magnetic"], lucky: { numbers: "8, 17, 26", color: "Crimson", day: "Tuesday" }, compat: ["Cancer", "Pisces", "Virgo"] },
+      Sagittarius: { symbol: "\u2650", dates: "Nov 22 \u2013 Dec 21", element: "Fire", elementIcon: "fa-fire", planet: "Jupiter", traits: ["Optimistic", "Adventurous", "Open-minded", "Philosophical"], lucky: { numbers: "3, 12, 21", color: "Purple", day: "Thursday" }, compat: ["Aries", "Leo", "Aquarius"] },
+      Capricorn:   { symbol: "\u2651", dates: "Dec 22 \u2013 Jan 19", element: "Earth", elementIcon: "fa-mountain", planet: "Saturn", traits: ["Disciplined", "Responsible", "Ambitious", "Patient"], lucky: { numbers: "4, 13, 22", color: "Brown", day: "Saturday" }, compat: ["Taurus", "Virgo", "Pisces"] },
+      Aquarius:    { symbol: "\u2652", dates: "Jan 20 \u2013 Feb 18", element: "Air", elementIcon: "fa-wind", planet: "Uranus", traits: ["Visionary", "Humanitarian", "Independent", "Inventive"], lucky: { numbers: "7, 16, 25", color: "Electric Blue", day: "Saturday" }, compat: ["Gemini", "Libra", "Sagittarius"] },
+      Pisces:      { symbol: "\u2653", dates: "Feb 19 \u2013 Mar 20", element: "Water", elementIcon: "fa-water", planet: "Neptune", traits: ["Compassionate", "Intuitive", "Artistic", "Gentle"], lucky: { numbers: "3, 12, 21", color: "Sea Green", day: "Thursday" }, compat: ["Cancer", "Scorpio", "Capricorn"] }
+    };
 
-      // Validate inputs
-      if (!day || !month || !year) {
-        alert("Please fill in all fields.");
-        return;
-      }
-
-      if (year < 1800 || year > 2500) {
-        alert("Please enter a valid year between 1800 and 2500.");
-        return;
-      }
-
-      // Calculate zodiac sign based on birth date
-      var horoscopeSign = getZodiacSign(day, month);
-
-      // Display results
-      document.getElementById("starName").textContent = horoscopeSign;
-      document.getElementById("starDescription").textContent = getHoroscopeIntroduction(horoscopeSign);
-
-      // Show result section
-      document.getElementById("horoscopeResult").style.display = "block";
-    }
-
-    // Function to determine zodiac sign based on day and month
+    // Keep the existing zodiac determination logic exactly as-is
     function getZodiacSign(day, month) {
       if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return "Aries";
       if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return "Taurus";
@@ -185,7 +594,6 @@
     }
 
     function getHoroscopeIntroduction(horoscopeSign) {
-      
       switch (horoscopeSign) {
         case "Aries":
           return "Aries is the first astrological sign in the zodiac. People born under this sign are often confident, dynamic, and ambitious.";
@@ -215,11 +623,135 @@
           return "";
       }
     }
+
+    function getDailyInsight(sign) {
+      var insights = [
+        "The stars align in your favor today. Trust your intuition and take bold steps toward your goals.",
+        "A period of reflection awaits. Look inward and reconnect with what truly matters to your soul.",
+        "Creative energy flows strongly through you today. Channel it into a passion project.",
+        "An unexpected connection may bring new opportunities. Stay open to the universe's gifts.",
+        "Today is ideal for setting intentions. The cosmos supports your ambitions and dreams.",
+        "Harmony in relationships takes center stage. Express gratitude to those who uplift you.",
+        "Your natural wisdom shines brightly now. Others may seek your counsel and guidance.",
+        "A transformative energy surrounds you. Embrace change as a pathway to growth.",
+        "The celestial bodies encourage patience. Great things are unfolding at the perfect pace.",
+        "Your inner strength is your greatest asset today. Face challenges with quiet confidence.",
+        "The universe whispers secrets of abundance. Listen closely and act with purpose.",
+        "A wave of inspiration is heading your way. Let your imagination soar without limits."
+      ];
+      var today = new Date();
+      var seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+      var signIndex = Object.keys(zodiacData).indexOf(sign);
+      var index = (seed + signIndex) % insights.length;
+      return insights[index];
+    }
+
+    function getHoroscope() {
+      var day = parseInt(document.getElementById("day").value);
+      var month = parseInt(document.getElementById("month").value);
+      var year = parseInt(document.getElementById("year").value);
+
+      if (!day || !month || !year) {
+        alert("Please fill in all fields.");
+        return;
+      }
+      if (year < 1800 || year > 2500) {
+        alert("Please enter a valid year between 1800 and 2500.");
+        return;
+      }
+
+      var horoscopeSign = getZodiacSign(day, month);
+      displayResult(horoscopeSign);
+    }
+
+    function displayResult(sign) {
+      var data = zodiacData[sign];
+      if (!data) return;
+
+      document.getElementById("resultSymbol").textContent = data.symbol;
+      document.getElementById("resultSignName").textContent = sign;
+      document.getElementById("resultDateRange").textContent = data.dates;
+
+      // Meta badges
+      var metaHTML = '<div class="meta-badge"><i class="fas ' + data.elementIcon + '"></i><span>' + data.element + '</span></div>';
+      metaHTML += '<div class="meta-badge"><i class="fas fa-globe"></i><span>' + data.planet + '</span></div>';
+      document.getElementById("resultMeta").innerHTML = metaHTML;
+
+      // Traits
+      var traitsHTML = '';
+      for (var i = 0; i < data.traits.length; i++) {
+        traitsHTML += '<span class="trait-tag">' + data.traits[i] + '</span>';
+      }
+      document.getElementById("resultTraits").innerHTML = traitsHTML;
+
+      // Description
+      document.getElementById("resultDescription").textContent = getHoroscopeIntroduction(sign);
+
+      // Lucky
+      var luckyHTML = '<div class="lucky-item"><span class="lucky-label">Lucky Numbers</span><span class="lucky-value">' + data.lucky.numbers + '</span></div>';
+      luckyHTML += '<div class="lucky-item"><span class="lucky-label">Lucky Color</span><span class="lucky-value">' + data.lucky.color + '</span></div>';
+      luckyHTML += '<div class="lucky-item"><span class="lucky-label">Lucky Day</span><span class="lucky-value">' + data.lucky.day + '</span></div>';
+      document.getElementById("resultLucky").innerHTML = luckyHTML;
+
+      // Compatibility
+      var compatHTML = '';
+      for (var j = 0; j < data.compat.length; j++) {
+        var cSign = data.compat[j];
+        var cData = zodiacData[cSign];
+        compatHTML += '<span class="compat-tag">' + cData.symbol + ' ' + cSign + '</span>';
+      }
+      document.getElementById("resultCompat").innerHTML = compatHTML;
+
+      // Daily insight
+      document.getElementById("resultInsight").textContent = getDailyInsight(sign);
+
+      // Show with animation
+      var resultEl = document.getElementById("horoscopeResult");
+      resultEl.classList.remove("visible");
+      // Force reflow for re-triggering animation
+      void resultEl.offsetWidth;
+      resultEl.classList.add("visible");
+      resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Build zodiac grid
+    (function() {
+      var grid = document.getElementById('zodiacGrid');
+      var signs = Object.keys(zodiacData);
+      var gridData = [
+        { sign: "Aries", month: 3, day: 25 },
+        { sign: "Taurus", month: 4, day: 25 },
+        { sign: "Gemini", month: 6, day: 1 },
+        { sign: "Cancer", month: 7, day: 1 },
+        { sign: "Leo", month: 8, day: 1 },
+        { sign: "Virgo", month: 9, day: 1 },
+        { sign: "Libra", month: 10, day: 1 },
+        { sign: "Scorpio", month: 11, day: 1 },
+        { sign: "Sagittarius", month: 12, day: 1 },
+        { sign: "Capricorn", month: 1, day: 1 },
+        { sign: "Aquarius", month: 2, day: 1 },
+        { sign: "Pisces", month: 3, day: 1 }
+      ];
+      for (var i = 0; i < gridData.length; i++) {
+        var g = gridData[i];
+        var data = zodiacData[g.sign];
+        var card = document.createElement('div');
+        card.className = 'zodiac-card';
+        card.innerHTML = '<span class="zc-symbol">' + data.symbol + '</span><div class="zc-name">' + g.sign + '</div><div class="zc-dates">' + data.dates + '</div>';
+        card.setAttribute('data-month', g.month);
+        card.setAttribute('data-day', g.day);
+        card.setAttribute('data-sign', g.sign);
+        card.addEventListener('click', function() {
+          var m = this.getAttribute('data-month');
+          var d = this.getAttribute('data-day');
+          document.getElementById('month').value = m;
+          document.getElementById('day').value = d;
+          document.getElementById('year').value = document.getElementById('year').value || '2000';
+          displayResult(this.getAttribute('data-sign'));
+        });
+        grid.appendChild(card);
+      }
+    })();
   </script>
-
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-
 </html>
