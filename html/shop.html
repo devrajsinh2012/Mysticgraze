@@ -1,151 +1,747 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Astrogy Shop </title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <title>MysticGraze - Mystical Shop</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
   <style>
+    /* Reset & Variables */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --navbar-height: 70px;
+      --primary-color: #9d4edd;
+      --secondary-color: #c77dff;
+      --accent-color: #e0aaff;
+      --dark-bg: #10002b;
+      --darker-bg: #240046;
+      --light-text: #ffffff;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Raleway', sans-serif;
+      background: var(--dark-bg);
+      color: var(--light-text);
+      overflow-x: hidden;
     }
-    header {
-      background-color: #3498db;
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-    }
-    main {
-      text-align: center;
-      padding: 20px;
-    }
-    .carousel-item {
-      transition: transform 0.5s;
-    }
-    .carousel-item.active {
-      transform: translateX(0);
-    }
-    .carousel-item.next {
-      transform: translateX(100%);
-    }
-    .carousel-item.prev {
-      transform: translateX(-100%);
-    }
-    .carousel-indicators li {
-      background-color: rgba(255, 255, 255, 0.4);
-    }
-    .carousel-indicators .active {
-      background-color: #fff;
-    }
-    .product {
-      background: none; 
-      padding: 10px;
-      margin: 30px;
-      display: inline-block;
-      width: 500px;
-    }
-    .carousel-inner>.carousel-item>.product> img {
-      height: 500px; 
-      width: 500px;
-      vertical-align: middle;
-     
-    }
-    .carousel-caption {
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 20px;
-     margin-top: 50%;
-    
-    }
-    .carousel-caption h3,
-    .carousel-caption p {
-      color: #fff;
-    }
-    .carousel-caption p {
-      margin-bottom: 0;
-    }
-    .carousel-caption button {
-      margin-top: 10px;
-    }
-    .btn-primary {
-      background-color: #ffc107;
-      border-color: #ffc107;
-    }
-    .btn-primary:hover {
-      background-color: #ffcd36;
-      border-color: #ffcd36;
-    }
-    .home-button {
+
+    /* ── Starry Background ── */
+    .stars-bg {
       position: fixed;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
     }
+
+    /* ── Navigation ── */
+    #navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 0 5%;
+      height: var(--navbar-height);
+      backdrop-filter: blur(10px);
+      background: rgba(16, 0, 43, 0.8);
+      border-bottom: 1px solid rgba(157, 78, 221, 0.3);
+      z-index: 1000;
+    }
+
+    #navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    #navbar .logo i {
+      font-size: 2rem;
+      color: var(--secondary-color);
+      animation: rotateMoon 20s linear infinite;
+    }
+
+    @keyframes rotateMoon {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    #navbar ul {
+      display: flex;
+      gap: 10px;
+      list-style: none;
+      font-family: 'Raleway', sans-serif;
+    }
+
+    #navbar ul li a {
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #navbar ul li a::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: var(--gradient-1);
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+
+    #navbar ul li a:hover::before { left: 0; }
+    #navbar ul li a:hover {
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
+    }
+
+    #navbar ul li a.active-link {
+      background: var(--gradient-1);
+      color: white;
+    }
+
+    /* Cart icon in navbar */
+    .cart-icon {
+      position: relative;
+      color: var(--accent-color);
+      font-size: 1.4rem;
+      cursor: pointer;
+      margin-left: 15px;
+      transition: color 0.3s;
+    }
+    .cart-icon:hover { color: var(--secondary-color); }
+
+    .cart-count {
+      position: absolute;
+      top: -8px; right: -10px;
+      background: var(--primary-color);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+    }
+    .cart-count.bump { animation: cartBump 0.3s ease; }
+    @keyframes cartBump {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+
+    /* Mobile menu toggle */
+    .menu-toggle {
+      display: none;
+      font-size: 1.6rem;
+      color: var(--accent-color);
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* ── Hero Section ── */
+    .shop-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 55vh;
+      padding: calc(var(--navbar-height) + 40px) 5% 40px;
+      position: relative;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(157, 78, 221, 0.15) 0%, transparent 70%);
+    }
+
+    .shop-hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-color), var(--secondary-color), var(--primary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .shop-hero p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: rgba(224, 170, 255, 0.8);
+      max-width: 600px;
+      animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    .shop-hero .zodiac-divider {
+      margin-top: 25px;
+      font-size: 1.5rem;
+      letter-spacing: 12px;
+      color: var(--secondary-color);
+      opacity: 0.6;
+      animation: fadeInUp 0.8s ease 0.4s both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Filter Buttons ── */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 0 5% 40px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .filter-btn {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 10px 28px;
+      border-radius: 30px;
+      border: 1px solid rgba(157, 78, 221, 0.4);
+      background: rgba(36, 0, 70, 0.5);
+      color: var(--accent-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--gradient-1);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 5px 20px rgba(157, 78, 221, 0.4);
+    }
+
+    /* ── Product Grid ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 35px;
+      padding: 0 5% 80px;
+      max-width: 1300px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Product Card ── */
+    .product-card {
+      background: rgba(36, 0, 70, 0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(157, 78, 221, 0.25);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 50px rgba(157, 78, 221, 0.35);
+      border-color: var(--secondary-color);
+    }
+
+    .product-card .img-wrap {
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: radial-gradient(circle, rgba(157, 78, 221, 0.1), transparent);
+    }
+
+    .product-card .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .img-wrap img {
+      transform: scale(1.08);
+    }
+
+    .product-card .card-body {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .product-card .card-body .category-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--secondary-color);
+      margin-bottom: 8px;
+    }
+
+    .product-card .card-body h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+      color: var(--light-text);
+    }
+
+    .product-card .card-body p {
+      font-size: 0.9rem;
+      color: rgba(224, 170, 255, 0.7);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .product-card .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 25px 25px;
+    }
+
+    .product-card .price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent-color);
+    }
+
+    /* ── Button ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 12px 28px;
+      border-radius: 30px;
+      border: none;
+      background: var(--gradient-1);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(157, 78, 221, 0.5);
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--darker-bg);
+      border-top: 1px solid rgba(157, 78, 221, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      padding: 60px 5% 40px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .footer-section h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+    }
+
+    .footer-section p { color: rgba(224, 170, 255, 0.6); line-height: 1.8; }
+    .footer-section ul { list-style: none; }
+    .footer-section ul li { margin-bottom: 10px; color: rgba(224, 170, 255, 0.6); font-size: 0.95rem; }
+    .footer-section ul li a { color: rgba(224, 170, 255, 0.6); text-decoration: none; transition: color 0.3s; }
+    .footer-section ul li a:hover { color: var(--accent-color); }
+
+    .social-links { display: flex; gap: 15px; margin-top: 15px; }
+    .social-links a {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(157, 78, 221, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .social-links a:hover { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+
+    .footer-bottom {
+      text-align: center;
+      padding: 20px 5%;
+      border-top: 1px solid rgba(157, 78, 221, 0.15);
+      color: rgba(224, 170, 255, 0.4);
+      font-size: 0.85rem;
+    }
+    .footer-bottom a { color: var(--secondary-color); text-decoration: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-content { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+
+      #navbar ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: var(--navbar-height);
+        left: 0; right: 0;
+        background: rgba(16, 0, 43, 0.95);
+        padding: 20px;
+        border-bottom: 1px solid rgba(157, 78, 221, 0.3);
+      }
+      #navbar ul.open { display: flex; }
+      #navbar ul li a { justify-content: center; }
+
+      .shop-hero h1 { font-size: 2.2rem; }
+      .shop-hero p { font-size: 1rem; }
+      .product-grid { grid-template-columns: 1fr; gap: 25px; padding: 0 5% 50px; }
+      .footer-content { grid-template-columns: 1fr; }
+    }
+
+    /* ── Toast notification ── */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(36, 0, 70, 0.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--primary-color);
+      border-radius: 12px;
+      padding: 16px 24px;
+      color: var(--accent-color);
+      font-weight: 500;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
   </style>
 </head>
-
 <body>
-  <header>
-    <h1>Welcome to Astrogy Shop - Your Destination for Unique Jewelry</h1>
-  </header>
 
-  <main>
-    <div id="productSlider" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators">
-        <li data-target="#productSlider" data-slide-to="0" class="active"></li>
-        <li data-target="#productSlider" data-slide-to="1"></li>
-        <li data-target="#productSlider" data-slide-to="2"></li>
-      </ol>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="product">
-            <img src="sh22.png" alt="Bracelet 1">
-          </div>
-          <div class="carousel-caption">
-            <h3>Bracelet </h3>
-            <p>An elegant bracelet to enhance your style. Made with love and care.</p>
-            <p>Price: $29.99</p>
-            <button class="btn btn-primary">Add to Cart</button>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="product">
-            <img src="sh55.png" alt="Necklace">
-          </div>
-          <div class="carousel-caption">
-            <h3>Necklace</h3>
-            <p>A beautiful necklace that complements your outfit. Handcrafted for perfection.</p>
-            <p>Price: $49.99</p>
-            <button class="btn btn-primary">Add to Cart</button>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="product">
-            <img src="sh57.png" alt="Earring">
-          </div>
-          <div class="carousel-caption">
-            <h3>Earring</h3>
-            <p>Elevate your look with these exquisite earrings. A perfect addition to your jewelry collection.</p>
-            <p>Price: $19.99</p>
-            <button class="btn btn-primary">Add to Cart</button>
-          </div>
+  <!-- Starry background canvas -->
+  <canvas class="stars-bg" id="starsCanvas"></canvas>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <a href="../index.html" class="logo">
+      <i class="fas fa-moon"></i>
+      <span>MysticGraze</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul id="navMenu">
+      <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="horo2.html"><i class="fas fa-star"></i> Horoscope</a></li>
+      <li><a href="learn.html"><i class="fas fa-book"></i> Learn</a></li>
+      <li><a href="tarot.html"><i class="fas fa-magic"></i> Tarot</a></li>
+      <li><a href="shop.html" class="active-link"><i class="fas fa-shopping-bag"></i> Shop</a></li>
+    </ul>
+    <div class="cart-icon" id="cartIcon">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count" id="cartCount">0</span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="shop-hero">
+    <h1>Mystical Shop</h1>
+    <p>Adorn yourself with celestial treasures and unlock the energy of the cosmos</p>
+    <div class="zodiac-divider">♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓</div>
+  </section>
+
+  <!-- Filters -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="jewelry">Jewelry</button>
+    <button class="filter-btn" data-filter="spiritual">Spiritual Tools</button>
+    <button class="filter-btn" data-filter="art">Art &amp; Prints</button>
+  </div>
+
+  <!-- Product Grid -->
+  <section class="product-grid" id="productGrid">
+
+    <!-- 1 -->
+    <div class="product-card" data-category="jewelry">
+      <div class="img-wrap"><img src="sh22.png" alt="Zodiac Crystal Bracelet"></div>
+      <div class="card-body">
+        <span class="category-tag">Jewelry</span>
+        <h3>Zodiac Crystal Bracelet</h3>
+        <p>An elegant bracelet infused with zodiac crystals to enhance your cosmic energy and style.</p>
+      </div>
+      <div class="card-footer">
+        <span class="price">$29.99</span>
+        <button class="btn add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="product-card" data-category="jewelry">
+      <div class="img-wrap"><img src="sh55.png" alt="Celestial Pendant Necklace"></div>
+      <div class="card-body">
+        <span class="category-tag">Jewelry</span>
+        <h3>Celestial Pendant Necklace</h3>
+        <p>A handcrafted pendant capturing the beauty of the night sky. Wear the cosmos close to your heart.</p>
+      </div>
+      <div class="card-footer">
+        <span class="price">$49.99</span>
+        <button class="btn add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="product-card" data-category="jewelry">
+      <div class="img-wrap"><img src="sh57.png" alt="Moonstone Earrings"></div>
+      <div class="card-body">
+        <span class="category-tag">Jewelry</span>
+        <h3>Moonstone Earrings</h3>
+        <p>Ethereal moonstone earrings that shimmer with lunar energy. A perfect addition to your collection.</p>
+      </div>
+      <div class="card-footer">
+        <span class="price">$19.99</span>
+        <button class="btn add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="product-card" data-category="art">
+      <div class="img-wrap"><img src="sh1.png" alt="Astrology Birth Chart Print"></div>
+      <div class="card-body">
+        <span class="category-tag">Art &amp; Prints</span>
+        <h3>Astrology Birth Chart Print</h3>
+        <p>A beautifully illustrated birth chart poster — a personalized map of the stars at the moment you were born.</p>
+      </div>
+      <div class="card-footer">
+        <span class="price">$24.99</span>
+        <button class="btn add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="product-card" data-category="spiritual">
+      <div class="img-wrap"><img src="sh11.png" alt="Tarot Card Deck"></div>
+      <div class="card-body">
+        <span class="category-tag">Spiritual Tools</span>
+        <h3>Tarot Card Deck</h3>
+        <p>A mystical 78-card tarot deck with celestial artwork. Unlock the wisdom of the universe.</p>
+      </div>
+      <div class="card-footer">
+        <span class="price">$34.99</span>
+        <button class="btn add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="product-card" data-category="spiritual">
+      <div class="img-wrap"><img src="sh1.png" alt="Crystal Healing Set"></div>
+      <div class="card-body">
+        <span class="category-tag">Spiritual Tools</span>
+        <h3>Crystal Healing Set</h3>
+        <p>A curated collection of seven healing crystals aligned with the chakras. Channel cosmic energy and balance.</p>
+      </div>
+      <div class="card-footer">
+        <span class="price">$39.99</span>
+        <button class="btn add-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3><i class="fas fa-moon"></i> MysticGraze</h3>
+        <p>Your gateway to cosmic wisdom and celestial guidance.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
         </div>
       </div>
-      <a class="carousel-control-prev" href="#productSlider" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#productSlider" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="horo2.html">Horoscope</a></li>
+          <li><a href="tarot.html">Tarot Reading</a></li>
+          <li><a href="learn.html">Learn Astrology</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Services</h3>
+        <ul>
+          <li><a href="#">Birth Chart Analysis</a></li>
+          <li><a href="#">Compatibility Reports</a></li>
+          <li><a href="#">Personalized Readings</a></li>
+          <li><a href="shop.html">Shop</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <ul>
+          <li><i class="fas fa-envelope"></i> info@mysticgraze.com</li>
+          <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+          <li><i class="fas fa-map-marker-alt"></i> Cosmic Realm</li>
+        </ul>
+      </div>
     </div>
-  </main>
-  <a href="../index.html" class="btn btn-primary home-button">Home</a>
+    <div class="footer-bottom">
+      <p>&copy; 2024 MysticGraze. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+  </footer>
 
-  
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    /* ── Starry Background ── */
+    (function initStars() {
+      var canvas = document.getElementById('starsCanvas');
+      var ctx = canvas.getContext('2d');
+      var stars = [];
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = document.body.scrollHeight;
+      }
+
+      function create() {
+        stars = [];
+        var count = Math.floor((canvas.width * canvas.height) / 4000);
+        for (var i = 0; i < count; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5 + 0.3,
+            a: Math.random(),
+            d: Math.random() * 0.02 + 0.005
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < stars.length; i++) {
+          var s = stars[i];
+          s.a += s.d;
+          if (s.a > 1 || s.a < 0) s.d = -s.d;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(224,170,255,' + Math.abs(s.a) + ')';
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      create();
+      draw();
+      window.addEventListener('resize', function() { resize(); create(); });
+    })();
+
+    /* ── Mobile Menu Toggle ── */
+    document.getElementById('menuToggle').addEventListener('click', function() {
+      document.getElementById('navMenu').classList.toggle('open');
+    });
+
+    /* ── Cart Counter ── */
+    var cartCount = 0;
+    var cartEl = document.getElementById('cartCount');
+    var toastEl = document.getElementById('toast');
+    var toastTimer;
+
+    function showToast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 2000);
+    }
+
+    document.querySelectorAll('.add-cart').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        cartCount++;
+        cartEl.textContent = cartCount;
+        cartEl.classList.remove('bump');
+        void cartEl.offsetWidth;
+        cartEl.classList.add('bump');
+        var name = this.closest('.product-card').querySelector('h3').textContent;
+        showToast('✨ ' + name + ' added to cart!');
+      });
+    });
+
+    /* ── Category Filters ── */
+    var filterBtns = document.querySelectorAll('.filter-btn');
+    var cards = document.querySelectorAll('.product-card');
+
+    filterBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var filter = this.getAttribute('data-filter');
+
+        cards.forEach(function(card) {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>  
