@@ -4,239 +4,877 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tarot Reading</title>
+  <title>MysticGraze - Tarot Reading</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: url("tr1.png") no-repeat center center fixed;
-      background-size: #fff;
-      color: #ffffff;
-      margin: 0;
-      padding: 0;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --navbar-height: 70px;
+      --primary-color: #9d4edd;
+      --secondary-color: #c77dff;
+      --accent-color: #e0aaff;
+      --dark-bg: #10002b;
+      --darker-bg: #240046;
+      --light-text: #ffffff;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
     }
 
-    .container {
-  max-width: 1500px;
-  margin: 20px auto;
-  padding: 20px;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.85);
-  border-radius: 8px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+    body {
+      font-family: 'Raleway', sans-serif;
+      background: var(--dark-bg);
+      color: var(--light-text);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
 
-    h1 {
-      margin-top: 0;
-      padding-top: 40px;
-      background: linear-gradient(to right, #ff00a6, #47a1ff);
+    .stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star-dot {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--dur) ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.3); }
+    }
+
+    #navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 0 5%;
+      height: var(--navbar-height);
+      backdrop-filter: blur(10px);
+      background: rgba(16, 0, 43, 0.8);
+      border-bottom: 1px solid rgba(157, 78, 221, 0.3);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    #navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    #navbar .logo i {
+      font-size: 2rem;
+      color: var(--secondary-color);
+      animation: rotateMoon 20s linear infinite;
+    }
+
+    @keyframes rotateMoon {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    #navbar ul {
+      display: flex;
+      gap: 10px;
+      list-style: none;
+      font-family: 'Raleway', sans-serif;
+    }
+
+    #navbar ul li a {
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #navbar ul li a::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: var(--gradient-1);
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+
+    #navbar ul li a:hover::before { left: 0; }
+
+    #navbar ul li a:hover {
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
+    }
+
+    #navbar ul li a.active {
+      background: var(--gradient-1);
+      color: white;
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .menu-toggle span {
+      width: 28px; height: 3px;
+      background: var(--accent-color);
+      border-radius: 3px;
+      transition: 0.3s;
+    }
+
+    .page-content {
+      padding-top: calc(var(--navbar-height) + 40px);
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tarot-hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+    }
+
+    .tarot-hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color), var(--secondary-color));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+      animation: shimmer 3s ease-in-out infinite;
+      background-size: 200% auto;
     }
 
-    label {
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 200% center; }
+    }
+
+    .tarot-hero p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--accent-color);
+      opacity: 0.8;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .zodiac-selection {
+      text-align: center;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .zodiac-selection label {
       display: block;
-      margin-bottom: 10px;
-      color: #ff00a6;
-    }
-
-    select {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: var(--accent-color);
       margin-bottom: 20px;
-      padding: 10px;
-      font-size: 16px;
-      background: rgba(255, 255, 255, 0.2);
-      color: #ffc107;
-      border: none;
-      border-radius: 4px;
+      letter-spacing: 1px;
     }
 
-    .predictions {
+    .select-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .select-wrapper select {
+      appearance: none;
+      padding: 14px 50px 14px 20px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 1rem;
+      color: var(--accent-color);
+      background: rgba(36, 0, 70, 0.6);
+      border: 1px solid rgba(157, 78, 221, 0.4);
+      border-radius: 30px;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c77dff' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 18px center;
+    }
+
+    .select-wrapper select:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 20px rgba(157, 78, 221, 0.3);
+    }
+
+    .select-wrapper select option {
+      background: var(--darker-bg);
+      color: var(--accent-color);
+    }
+
+    .btn-reading {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 35px;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      background: var(--gradient-1);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+
+    .btn-reading:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(157, 78, 221, 0.5);
+    }
+
+    .btn-reading:active { transform: translateY(-1px); }
+
+    .cards-container {
       display: flex;
       justify-content: center;
+      gap: 40px;
       flex-wrap: wrap;
-      margin-bottom: 40px;
+      padding: 20px 40px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .prediction {
-      width: 200px;
-      height: 200px;
-      margin: 10px;
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-      border-radius: 8px;
+    .tarot-card {
+      width: 300px;
+      min-height: 420px;
+      perspective: 1000px;
+      cursor: default;
+      position: relative;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      min-height: 420px;
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+    }
+
+    .tarot-card.revealed .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      min-height: 420px;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .card-back {
+      background: linear-gradient(145deg, #1a0040, #3c096c, #240046);
+      border: 2px solid rgba(157, 78, 221, 0.5);
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 0 30px rgba(157, 78, 221, 0.2),
+                  inset 0 0 60px rgba(157, 78, 221, 0.1);
     }
 
-    .prediction h2 {
-      margin: 0;
-      padding: 10px;
-      background: linear-gradient(to right, #ffc107, #ff9800);
+    .card-back-design {
+      width: 85%;
+      height: 380px;
+      border: 2px solid rgba(199, 125, 255, 0.3);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: radial-gradient(ellipse at center, rgba(157, 78, 221, 0.15) 0%, transparent 70%);
+    }
+
+    .card-back-design::before,
+    .card-back-design::after {
+      content: '';
+      position: absolute;
+      border: 1px solid rgba(224, 170, 255, 0.2);
+      border-radius: 8px;
+    }
+
+    .card-back-design::before { width: 90%; height: 92%; }
+    .card-back-design::after { width: 80%; height: 84%; }
+
+    .card-back-star {
+      font-size: 3rem;
+      color: var(--secondary-color);
+      text-shadow: 0 0 20px rgba(199, 125, 255, 0.6);
+      animation: pulseStar 2s ease-in-out infinite;
+    }
+
+    .card-back-label {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: var(--accent-color);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 15px;
+      opacity: 0.8;
+    }
+
+    .corner-star {
+      position: absolute;
+      font-size: 0.8rem;
+      color: rgba(224, 170, 255, 0.5);
+    }
+
+    .corner-star:nth-child(1) { top: 8px; left: 8px; }
+    .corner-star:nth-child(2) { top: 8px; right: 8px; }
+    .corner-star:nth-child(3) { bottom: 8px; left: 8px; }
+    .corner-star:nth-child(4) { bottom: 8px; right: 8px; }
+
+    @keyframes pulseStar {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+
+    .card-front {
+      transform: rotateY(180deg);
+      background: linear-gradient(160deg, rgba(36, 0, 70, 0.9), rgba(16, 0, 43, 0.95));
+      border: 1px solid rgba(157, 78, 221, 0.4);
+      backdrop-filter: blur(15px);
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 0 40px rgba(157, 78, 221, 0.15);
+    }
+
+    .card-category {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--secondary-color);
+      margin-bottom: 8px;
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    button {
-      padding: 10px 20px;
-      background: #ffc107;
-      border: none;
-      color: #000;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s;
+    .card-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-align: center;
+      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 5px;
     }
 
-    button:hover {
-      background: #ffcd36;
+    .card-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+      margin: 12px 0;
     }
 
-    .home-link {
-      display: block;
-      margin-top: 40px;
+    .card-reading {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.85);
+      text-align: center;
+      flex-grow: 1;
     }
 
-    .home-link a {
-      color: #fff;
+    .tarot-card::after {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      border-radius: 18px;
+      background: linear-gradient(45deg,
+        rgba(157, 78, 221, 0.4),
+        rgba(199, 125, 255, 0.1),
+        rgba(224, 170, 255, 0.4),
+        rgba(157, 78, 221, 0.1));
+      background-size: 300% 300%;
+      z-index: -1;
+      animation: glowShift 4s ease infinite;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .tarot-card.revealed::after { opacity: 1; }
+
+    @keyframes glowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .tarot-card:hover .card-inner {
+      transform: translateY(-5px);
+    }
+
+    .tarot-card.revealed:hover .card-inner {
+      transform: rotateY(180deg) translateY(-5px);
+    }
+
+    footer {
+      background: var(--darker-bg);
+      border-top: 1px solid rgba(157, 78, 221, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 50px 40px 30px;
+    }
+
+    .footer-section h3 {
+      font-family: 'Cinzel', serif;
+      color: var(--accent-color);
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .footer-section p,
+    .footer-section li {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+      line-height: 2;
+    }
+
+    .footer-section ul { list-style: none; }
+
+    .footer-section a {
+      color: rgba(255, 255, 255, 0.6);
       text-decoration: none;
-      background: linear-gradient(to right, #ffc107, #ff9800);
-      padding: 10px 20px;
-      border-radius: 4px;
-      transition: background 0.3s;
+      transition: color 0.3s ease;
     }
 
-    .home-link a:hover {
-      background: #ffcd36;
+    .footer-section a:hover { color: var(--accent-color); }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .social-links a {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(157, 78, 221, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .social-links a:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid rgba(157, 78, 221, 0.15);
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .footer-bottom a {
+      color: var(--secondary-color);
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle { display: flex; }
+
+      #navbar ul {
+        display: none;
+        position: absolute;
+        top: var(--navbar-height);
+        left: 0; right: 0;
+        flex-direction: column;
+        background: rgba(16, 0, 43, 0.97);
+        padding: 20px;
+        gap: 5px;
+        border-bottom: 1px solid rgba(157, 78, 221, 0.3);
+      }
+
+      #navbar ul.open { display: flex; }
+
+      #navbar ul li a {
+        padding: 12px 20px;
+        border-radius: 10px;
+      }
+
+      .tarot-hero h1 { font-size: 2rem; }
+      .tarot-hero p { font-size: 1rem; }
+
+      .cards-container { padding: 20px; gap: 30px; }
+
+      .tarot-card { width: 100%; max-width: 340px; }
+
+      .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 30px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #navbar .logo { font-size: 1.3rem; }
+      .select-wrapper { flex-direction: column; gap: 15px; }
+      .footer-content { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Welcome to Tarot Reading</h1>
-    <label for="zodiac">Select Your Zodiac Sign:</label>
-    <select id="zodiac">
-      <option value="0" selected>Select</option>
-      <option value="Aries">Aries</option>
-      <option value="Taurus">Taurus</option>
-      <option value="Gemini">Gemini</option>
-      <option value="Cancer">Cancer</option>
-      <option value="Leo">Leo</option>
-      <option value="Virgo">Virgo</option>
-      <option value="Libra">Libra</option>
-      <option value="Scorpio">Scorpio</option>
-      <option value="Sagittarius">Sagittarius</option>
-      <option value="Capricorn">Capricorn</option>
-      <option value="Aquarius">Aquarius</option>
-      <option value="Pisces">Pisces</option>
-    </select>
-    <button id="submit">Get Tarot Reading</button>
+  <div class="stars" id="stars"></div>
 
-    <div class="predictions">
-      <div class="prediction" id="love-tarot">
-        <h2>Love</h2>
-      </div>
-      <div class="prediction" id="career-tarot">
-        <h2>Career</h2>
-      </div>
-      <div class="prediction" id="life-tarot">
-        <h2>Life</h2>
+  <nav id="navbar">
+    <a href="../index.html" class="logo">
+      <i class="fas fa-moon"></i>
+      <span>MysticGraze</span>
+    </a>
+    <div class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </div>
+    <ul id="navMenu">
+      <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="horo2.html"><i class="fas fa-star"></i> Horoscope</a></li>
+      <li><a href="learn.html"><i class="fas fa-book"></i> Learn</a></li>
+      <li><a href="tarot.html" class="active"><i class="fas fa-magic"></i> Tarot</a></li>
+      <li><a href="shop.html"><i class="fas fa-shopping-bag"></i> Shop</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-content">
+    <section class="tarot-hero">
+      <h1>&#10022; Tarot Reading &#10022;</h1>
+      <p>Let the ancient cards unveil the hidden truths of your love, career, and life path</p>
+    </section>
+
+    <div class="zodiac-selection">
+      <label for="zodiac"><i class="fas fa-sun"></i> Choose Your Zodiac Sign</label>
+      <div class="select-wrapper">
+        <select id="zodiac">
+          <option value="0" selected>&#8212; Select Your Sign &#8212;</option>
+          <option value="Aries">&#9800; Aries</option>
+          <option value="Taurus">&#9801; Taurus</option>
+          <option value="Gemini">&#9802; Gemini</option>
+          <option value="Cancer">&#9803; Cancer</option>
+          <option value="Leo">&#9804; Leo</option>
+          <option value="Virgo">&#9805; Virgo</option>
+          <option value="Libra">&#9806; Libra</option>
+          <option value="Scorpio">&#9807; Scorpio</option>
+          <option value="Sagittarius">&#9808; Sagittarius</option>
+          <option value="Capricorn">&#9809; Capricorn</option>
+          <option value="Aquarius">&#9810; Aquarius</option>
+          <option value="Pisces">&#9811; Pisces</option>
+        </select>
+        <button class="btn-reading" id="submit">
+          <i class="fas fa-magic"></i> Reveal the Cards
+        </button>
       </div>
     </div>
 
- <div class="home-link">
-      <a href="../index.html">Home</a>
+    <div class="cards-container">
+      <div class="tarot-card" id="love-card">
+        <div class="card-inner">
+          <div class="card-face card-back">
+            <div class="card-back-design">
+              <span class="corner-star">&#10022;</span>
+              <span class="corner-star">&#10022;</span>
+              <span class="corner-star">&#10022;</span>
+              <span class="corner-star">&#10022;</span>
+              <div class="card-back-star">&#9825;</div>
+              <div class="card-back-label">Love</div>
+            </div>
+          </div>
+          <div class="card-face card-front" id="love-tarot">
+            <span class="card-category">Love</span>
+            <div class="card-icon">&#9825;</div>
+            <div class="card-name"></div>
+            <div class="card-divider"></div>
+            <div class="card-reading"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tarot-card" id="career-card">
+        <div class="card-inner">
+          <div class="card-face card-back">
+            <div class="card-back-design">
+              <span class="corner-star">&#10022;</span>
+              <span class="corner-star">&#10022;</span>
+              <span class="corner-star">&#10022;</span>
+              <span class="corner-star">&#10022;</span>
+              <div class="card-back-star">&#9885;</div>
+              <div class="card-back-label">Career</div>
+            </div>
+          </div>
+          <div class="card-face card-front" id="career-tarot">
+            <span class="card-category">Career</span>
+            <div class="card-icon">&#9885;</div>
+            <div class="card-name"></div>
+            <div class="card-divider"></div>
+            <div class="card-reading"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tarot-card" id="life-card">
+        <div class="card-inner">
+          <div class="card-face card-back">
+            <div class="card-back-design">
+              <span class="corner-star">&#10022;</span>
+              <span class="corner-star">&#10022;</span>
+              <span class="corner-star">&#10022;</span>
+              <span class="corner-star">&#10022;</span>
+              <div class="card-back-star">&#9789;</div>
+              <div class="card-back-label">Life</div>
+            </div>
+          </div>
+          <div class="card-face card-front" id="life-tarot">
+            <span class="card-category">Life</span>
+            <div class="card-icon">&#9789;</div>
+            <div class="card-name"></div>
+            <div class="card-divider"></div>
+            <div class="card-reading"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3><i class="fas fa-moon"></i> MysticGraze</h3>
+        <p>Your gateway to cosmic wisdom and celestial guidance.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="horo2.html">Horoscope</a></li>
+          <li><a href="tarot.html">Tarot Reading</a></li>
+          <li><a href="learn.html">Learn Astrology</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Services</h3>
+        <ul>
+          <li><a href="#">Birth Chart Analysis</a></li>
+          <li><a href="#">Compatibility Reports</a></li>
+          <li><a href="#">Personalized Readings</a></li>
+          <li><a href="shop.html">Shop</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <ul>
+          <li><i class="fas fa-envelope"></i> info@mysticgraze.com</li>
+          <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+          <li><i class="fas fa-map-marker-alt"></i> Cosmic Realm</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 MysticGraze. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+  </footer>
+
   <script>
-    const zodiacSelect = document.getElementById('zodiac');
-    const submitButton = document.getElementById('submit');
-    const loveTarot = document.getElementById('love-tarot');
-    const careerTarot = document.getElementById('career-tarot');
-    const lifeTarot = document.getElementById('life-tarot');
+    (function createStars() {
+      var container = document.getElementById('stars');
+      for (var i = 0; i < 120; i++) {
+        var star = document.createElement('div');
+        star.className = 'star-dot';
+        var size = Math.random() * 3 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--dur', (Math.random() * 3 + 2) + 's');
+        star.style.animationDelay = Math.random() * 4 + 's';
+        container.appendChild(star);
+      }
+    })();
 
-    submitButton.addEventListener('click', () => {
-      const selectedSign = zodiacSelect.value;
+    document.getElementById('menuToggle').addEventListener('click', function() {
+      document.getElementById('navMenu').classList.toggle('open');
+    });
 
-      
+    var zodiacSelect = document.getElementById('zodiac');
+    var submitButton = document.getElementById('submit');
+    var loveCard = document.getElementById('love-card');
+    var careerCard = document.getElementById('career-card');
+    var lifeCard = document.getElementById('life-card');
+    var loveFront = document.getElementById('love-tarot');
+    var careerFront = document.getElementById('career-tarot');
+    var lifeFront = document.getElementById('life-tarot');
+
+    function setCard(frontEl, cardName, reading) {
+      frontEl.querySelector('.card-name').textContent = cardName;
+      frontEl.querySelector('.card-reading').textContent = reading;
+    }
+
+    function revealCards(love, career, life) {
+      loveCard.classList.remove('revealed');
+      careerCard.classList.remove('revealed');
+      lifeCard.classList.remove('revealed');
+
+      setCard(loveFront, love.card, love.text);
+      setCard(careerFront, career.card, career.text);
+      setCard(lifeFront, life.card, life.text);
+
+      setTimeout(function() { loveCard.classList.add('revealed'); }, 200);
+      setTimeout(function() { careerCard.classList.add('revealed'); }, 500);
+      setTimeout(function() { lifeCard.classList.add('revealed'); }, 800);
+    }
+
+    submitButton.addEventListener('click', function() {
+      var selectedSign = zodiacSelect.value;
+      var love, career, life;
+
       switch (selectedSign) {
         case "Aries":
-          loveTarot.innerHTML = "The Chariot brings a message of your fearless pursuit for love. This phase encourages boldness and independence in love. However, ensure to balance your life, don't rush into decisions unprepared.";
-          careerTarot.innerHTML = "King of Wands in the career field denotes dynamic energy and ambitious nature. Embrace upcoming challenges with courage and don't be afraid to innovate.";
-          lifeTarot.innerHTML = "Strength rules your life path indicating that your journey is filled with the courage and determination that an Aries is known for. Strive for balance and harmony in life.";
+          love = { card: "The Chariot", text: "The Chariot brings a message of your fearless pursuit for love. This phase encourages boldness and independence in love. However, ensure to balance your life, don\u2019t rush into decisions unprepared." };
+          career = { card: "King of Wands", text: "King of Wands in the career field denotes dynamic energy and ambitious nature. Embrace upcoming challenges with courage and don\u2019t be afraid to innovate." };
+          life = { card: "Strength", text: "Strength rules your life path indicating that your journey is filled with the courage and determination that an Aries is known for. Strive for balance and harmony in life." };
           break;
 
         case "Taurus":
-          loveTarot.innerHTML = "The Empress showers your love life with nurturing energies and emphasize comfort. It’s a sign to further nurture your current bonds and foster deeper connections.";
-          careerTarot.innerHTML = "The Page of Pentacles urges an investment of time in learning new skills, which may be fundamental to your career progress. Its focus is on growth, development, and learning.";
-          lifeTarot.innerHTML = "The Hierophant indicates a significant period where nurturing your spiritual self is critical. This phase is about reflection, self-development, and growth.";
+          love = { card: "The Empress", text: "The Empress showers your love life with nurturing energies and emphasize comfort. It\u2019s a sign to further nurture your current bonds and foster deeper connections." };
+          career = { card: "Page of Pentacles", text: "The Page of Pentacles urges an investment of time in learning new skills, which may be fundamental to your career progress. Its focus is on growth, development, and learning." };
+          life = { card: "The Hierophant", text: "The Hierophant indicates a significant period where nurturing your spiritual self is critical. This phase is about reflection, self-development, and growth." };
           break;
 
         case "Gemini":
-          loveTarot.innerHTML = "The Lovers turns the spotlight on your relationships. Your communication skills are going to play a key role in maintaining harmony and strengthening bonds.";
-          careerTarot.innerHTML = "The Magician portrays your adaptable nature, reminding you to use your abilities for success. Your career path is filled with creativity, so cultivate multi-tasking skills.";
-          lifeTarot.innerHTML = "Temperance draws attention to maintaining balance in your chaotic life. It encourages integration of your dual nature and to find peace with it.";
+          love = { card: "The Lovers", text: "The Lovers turns the spotlight on your relationships. Your communication skills are going to play a key role in maintaining harmony and strengthening bonds." };
+          career = { card: "The Magician", text: "The Magician portrays your adaptable nature, reminding you to use your abilities for success. Your career path is filled with creativity, so cultivate multi-tasking skills." };
+          life = { card: "Temperance", text: "Temperance draws attention to maintaining balance in your chaotic life. It encourages integration of your dual nature and to find peace with it." };
           break;
 
         case "Cancer":
-          loveTarot.innerHTML = "The Queen of Cups suggests a phase where your emotional intelligence and intuition will play a crucial role in guiding your love life. Be open to embracing and expressing love.";
-          careerTarot.innerHTML = "The High Priestess is a calling to rely on your strong intuition and inner wisdom at your workplace. Trust your instincts in making decisions.";
-          lifeTarot.innerHTML = "The Moon amplifies periods of uncertainty. However, facing your fears while going through this phase will let you grow and enhance your emotional strength.";
+          love = { card: "Queen of Cups", text: "The Queen of Cups suggests a phase where your emotional intelligence and intuition will play a crucial role in guiding your love life. Be open to embracing and expressing love." };
+          career = { card: "The High Priestess", text: "The High Priestess is a calling to rely on your strong intuition and inner wisdom at your workplace. Trust your instincts in making decisions." };
+          life = { card: "The Moon", text: "The Moon amplifies periods of uncertainty. However, facing your fears while going through this phase will let you grow and enhance your emotional strength." };
           break;
 
         case "Leo":
-          loveTarot.innerHTML = "Strength Tarot reveals a period of passion and fostering courage in love matters. It encourages you to be brave and show your authentic emotional self.";
-          careerTarot.innerHTML = "The Sun Tarot shines brightly on your career, suggesting that your hard work and talent will flourish. Ensure to use your abilities to constructively shine in your field.";
-          lifeTarot.innerHTML = "The Emperor is a symbol of firm leadership and dominance signifying that it's time to take control of your life and the situations in it.";
+          love = { card: "Strength", text: "Strength Tarot reveals a period of passion and fostering courage in love matters. It encourages you to be brave and show your authentic emotional self." };
+          career = { card: "The Sun", text: "The Sun Tarot shines brightly on your career, suggesting that your hard work and talent will flourish. Ensure to use your abilities to constructively shine in your field." };
+          life = { card: "The Emperor", text: "The Emperor is a symbol of firm leadership and dominance signifying that it\u2019s time to take control of your life and the situations in it." };
           break;
 
         case "Virgo":
-          loveTarot.innerHTML = "The Hermit points towards a period of introspective solitude. Understand your emotional needs and desires to create a better love life.";
-          careerTarot.innerHTML = "The Eight of Pentacles spotlights your meticulousness and diligence. Attention to details will fetch you rewarding results in your career.";
-          lifeTarot.innerHTML = "The Wheel of Fortune brings periods of change. Agility and adaptability will help you throughout these wheels of change. Be receptive to twists and turns.";
+          love = { card: "The Hermit", text: "The Hermit points towards a period of introspective solitude. Understand your emotional needs and desires to create a better love life." };
+          career = { card: "Eight of Pentacles", text: "The Eight of Pentacles spotlights your meticulousness and diligence. Attention to details will fetch you rewarding results in your career." };
+          life = { card: "Wheel of Fortune", text: "The Wheel of Fortune brings periods of change. Agility and adaptability will help you throughout these wheels of change. Be receptive to twists and turns." };
           break;
 
         case "Libra":
-          loveTarot.innerHTML = "Justice Tarot reveals a time to uphold equilibrium in relationships. Balance fairness, impartiality, and harmony to make your love life smoother.";
-          careerTarot.innerHTML = "The Two of Swords indicates a significant career decision that needs attention. Weigh all your options thoroughly and tread carefully.";
-          lifeTarot.innerHTML = "The Star is bidding for optimism and hope. It's a sign that good times are imminent and the Universe is working in your favor. Hold on to your dreams.";
+          love = { card: "Justice", text: "Justice Tarot reveals a time to uphold equilibrium in relationships. Balance fairness, impartiality, and harmony to make your love life smoother." };
+          career = { card: "Two of Swords", text: "The Two of Swords indicates a significant career decision that needs attention. Weigh all your options thoroughly and tread carefully." };
+          life = { card: "The Star", text: "The Star is bidding for optimism and hope. It\u2019s a sign that good times are imminent and the Universe is working in your favor. Hold on to your dreams." };
           break;
 
         case "Scorpio":
-          loveTarot.innerHTML = "Death Tarot evokes transformation in relationships. The old must end to let the new begin. Embrace changes, as they may lead to a more satisfying love life.";
-          careerTarot.innerHTML = "The Tower indicates unexpected changes at work. Your courage to face these upheavals will be crucial for your growth. Embrace the transformation.";
-          lifeTarot.innerHTML = "The Judgement Tarot heralds a period of awakening. It's time to reevaluate your life choices and assess what truly serves you.";
+          love = { card: "Death", text: "Death Tarot evokes transformation in relationships. The old must end to let the new begin. Embrace changes, as they may lead to a more satisfying love life." };
+          career = { card: "The Tower", text: "The Tower indicates unexpected changes at work. Your courage to face these upheavals will be crucial for your growth. Embrace the transformation." };
+          life = { card: "Judgement", text: "The Judgement Tarot heralds a period of awakening. It\u2019s time to reevaluate your life choices and assess what truly serves you." };
           break;
 
         case "Sagittarius":
-          loveTarot.innerHTML = "Temperance Tarot is a beacon of balance. Your relationships seek understanding, patience, and compromise. Make sure to think before acting.";
-          careerTarot.innerHTML = "With the Knight of Wands, you can anticipate rapid career progression. The task at hand demands dynamism, energy, and innovation.";
-          lifeTarot.innerHTML = "The Fool encourages you to take risks and venture into the unknown. Use your adventurous spirit to explore and embrace change in life.";
+          love = { card: "Temperance", text: "Temperance Tarot is a beacon of balance. Your relationships seek understanding, patience, and compromise. Make sure to think before acting." };
+          career = { card: "Knight of Wands", text: "With the Knight of Wands, you can anticipate rapid career progression. The task at hand demands dynamism, energy, and innovation." };
+          life = { card: "The Fool", text: "The Fool encourages you to take risks and venture into the unknown. Use your adventurous spirit to explore and embrace change in life." };
           break;
 
         case "Capricorn":
-          loveTarot.innerHTML = "The Devil Tarot warns you against clinging to suffocating relationships. Seek liberation and break free from what no longer serves you.";
-          careerTarot.innerHTML = "The King of Pentacles foresees economic success in your career. Direct your Capricornian focus and diligence towards your goals to achieve success.";
-          lifeTarot.innerHTML = "The World Tarot card suggests a period of satisfaction and completion. Savor the rewards of your hard work and relish in your achievements.";
+          love = { card: "The Devil", text: "The Devil Tarot warns you against clinging to suffocating relationships. Seek liberation and break free from what no longer serves you." };
+          career = { card: "King of Pentacles", text: "The King of Pentacles foresees economic success in your career. Direct your Capricornian focus and diligence towards your goals to achieve success." };
+          life = { card: "The World", text: "The World Tarot card suggests a period of satisfaction and completion. Savor the rewards of your hard work and relish in your achievements." };
           break;
 
         case "Aquarius":
-          loveTarot.innerHTML = "The Star illuminates your relationship with a ray of rejuvenation. Your bonds could use some positive energy, sprinkle in some optimism and trust.";
-          careerTarot.innerHTML = "The Ace of Swords signifies mental clarity in your career and encourages you to implement your innovative ideas. With hard work and dedication, you can achieve anything.";
-          lifeTarot.innerHTML = "The Hanged Man suggests you seeing things from a different perspective. Embrace change and be open to new ideas and ways of thinking.";
+          love = { card: "The Star", text: "The Star illuminates your relationship with a ray of rejuvenation. Your bonds could use some positive energy, sprinkle in some optimism and trust." };
+          career = { card: "Ace of Swords", text: "The Ace of Swords signifies mental clarity in your career and encourages you to implement your innovative ideas. With hard work and dedication, you can achieve anything." };
+          life = { card: "The Hanged Man", text: "The Hanged Man suggests you seeing things from a different perspective. Embrace change and be open to new ideas and ways of thinking." };
           break;
 
         case "Pisces":
-          loveTarot.innerHTML = "The Moon depicts an emotional journey in relationships. It's essential to follow your intuition and trust your instincts. Be honest about your feelings.";
-          careerTarot.innerHTML = "The Page of Cups urges you to be creative at work. Embrace your imaginative side and let it guide you through the toughest decisions.";
-          lifeTarot.innerHTML = "The High Priestess denotes a period of spiritual enlightenment. Use your intuition to gain clarity and perspective, and trust your gut in every situation.";
+          love = { card: "The Moon", text: "The Moon depicts an emotional journey in relationships. It\u2019s essential to follow your intuition and trust your instincts. Be honest about your feelings." };
+          career = { card: "Page of Cups", text: "The Page of Cups urges you to be creative at work. Embrace your imaginative side and let it guide you through the toughest decisions." };
+          life = { card: "The High Priestess", text: "The High Priestess denotes a period of spiritual enlightenment. Use your intuition to gain clarity and perspective, and trust your gut in every situation." };
           break;
 
         default:
-
+          return;
       }
+
+      revealCards(love, career, life);
     });
   </script>
 </body>
