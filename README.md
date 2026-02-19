@@ -89,8 +89,7 @@ Mysticgraze/
 │   ├── horo2.html      # Horoscope calculator
 │   ├── tarot.html      # Tarot reading page
 │   ├── learn.html      # Learning resources
-│   ├── shop.html       # Shop page
-│   └── sign.html       # Sign up/Sign in page
+│   └── shop.html       # Shop page
 ├── *.jpg, *.png         # Image assets
 └── index/              # Image backup directory
 ```

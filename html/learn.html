@@ -1,152 +1,745 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mystigraze - Learn</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>MysticGraze - Learn Astrology</title>
+  <meta name="description" content="Explore the fundamentals of astrology — zodiac signs, planetary influences, birth charts, and more.">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-  
+    /* ── Reset & Variables ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --navbar-height: 70px;
+      --primary-color: #9d4edd;
+      --secondary-color: #c77dff;
+      --accent-color: #e0aaff;
+      --dark-bg: #10002b;
+      --darker-bg: #240046;
+      --light-text: #ffffff;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    }
+
     body {
-      background-color: #000000;
+      font-family: 'Raleway', sans-serif;
+      background: var(--dark-bg);
+      color: var(--light-text);
+      overflow-x: hidden;
     }
 
-    .navbar {
-      background-color: #343a40;
+    /* ── Starry Background ── */
+    .stars-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .page-header {
-      background: url('sign.png') no-repeat center center;
-      background-size: cover;
-      height: 300px;
+    /* ── Navigation ── */
+    #navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 0 5%;
+      height: var(--navbar-height);
+      backdrop-filter: blur(10px);
+      background: rgba(16, 0, 43, 0.8);
+      border-bottom: 1px solid rgba(157, 78, 221, 0.3);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(16, 0, 43, 0.95);
+      box-shadow: var(--shadow);
+    }
+    #navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+    #navbar .logo i {
+      font-size: 2rem;
+      color: var(--secondary-color);
+      animation: rotateMoon 20s linear infinite;
+    }
+    @keyframes rotateMoon {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    #navbar ul {
+      display: flex;
+      gap: 10px;
+      list-style: none;
+    }
+    #navbar ul li a {
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
       position: relative;
+      overflow: hidden;
     }
-
-    .page-header:before {
+    #navbar ul li a::before {
       content: '';
-      display: block;
       position: absolute;
-      left: 0;
-      top: 0;
-      height: inherit;
-      width: inherit;
-      background: rgba(0, 0, 0, 0.4);
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: var(--gradient-1);
+      transition: left 0.3s ease;
+      z-index: -1;
     }
-
-    .page-header h1 {
+    #navbar ul li a:hover::before { left: 0; }
+    #navbar ul li a:hover {
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
+    }
+    #navbar ul li a.active {
+      background: var(--gradient-1);
       color: #fff;
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
+    }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 5px;
+    }
+    .menu-toggle span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: var(--accent-color);
+      border-radius: 3px;
+      transition: 0.3s;
     }
 
+    /* ── Utility ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2.4rem;
+      text-align: center;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-subtitle {
+      text-align: center;
+      color: rgba(224, 170, 255, 0.7);
+      font-size: 1.05rem;
+      margin-bottom: 50px;
+    }
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 100px 0;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 70vh;
+      padding-top: var(--navbar-height);
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(36, 0, 70, 0.6) 0%, transparent 70%);
+    }
+    .hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, var(--accent-color), var(--secondary-color), var(--primary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeInUp 1s ease forwards;
+    }
+    .hero p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: rgba(224, 170, 255, 0.8);
+      max-width: 600px;
+      animation: fadeInUp 1s 0.3s ease both;
+    }
+    .hero .zodiac-symbols {
+      margin-top: 25px;
+      font-size: 1.6rem;
+      letter-spacing: 12px;
+      color: var(--secondary-color);
+      animation: fadeInUp 1s 0.6s ease both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Cards Grid ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+    }
+    .card {
+      background: rgba(36, 0, 70, 0.5);
+      border: 1px solid rgba(157, 78, 221, 0.2);
+      border-radius: 16px;
+      padding: 35px 25px;
+      text-align: center;
+      transition: all 0.4s ease;
+      backdrop-filter: blur(5px);
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: var(--secondary-color);
+      box-shadow: 0 15px 40px rgba(157, 78, 221, 0.25);
+    }
+    .card .icon {
+      width: 70px; height: 70px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: #fff;
+      background: var(--gradient-1);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+    .card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+      color: var(--accent-color);
+    }
+    .card p {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .btn-explore {
+      display: inline-block;
+      padding: 10px 28px;
+      border-radius: 25px;
+      background: var(--gradient-1);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    .btn-explore:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(157, 78, 221, 0.5);
+    }
+
+    /* ── Articles ── */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
     .article-card {
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.3s ease-in-out;
+      background: rgba(36, 0, 70, 0.5);
+      border: 1px solid rgba(157, 78, 221, 0.2);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.4s ease;
     }
-
     .article-card:hover {
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-6px);
+      border-color: var(--secondary-color);
+      box-shadow: 0 15px 40px rgba(157, 78, 221, 0.25);
     }
-
     .article-card img {
-      height: 200px;
+      width: 100%;
+      height: 220px;
       object-fit: cover;
     }
+    .article-card .card-body {
+      padding: 25px;
+    }
+    .article-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--accent-color);
+    }
+    .article-card p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
 
+    /* ── Videos ── */
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
     .video-card {
+      background: rgba(36, 0, 70, 0.5);
+      border: 1px solid rgba(157, 78, 221, 0.2);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .video-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--secondary-color);
+      box-shadow: 0 15px 40px rgba(157, 78, 221, 0.25);
+    }
+    .video-card .video-wrapper {
       position: relative;
       padding-bottom: 56.25%;
       height: 0;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.3s ease-in-out;
     }
-
     .video-card iframe {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+    .video-card .video-info {
+      padding: 20px 25px;
+    }
+    .video-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: var(--accent-color);
     }
 
-    .video-card:hover {
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    /* ── Beginner's Guide ── */
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 35px;
+    }
+    .guide-card {
+      background: rgba(36, 0, 70, 0.5);
+      border: 1px solid rgba(157, 78, 221, 0.2);
+      border-radius: 16px;
+      padding: 30px;
+      transition: all 0.4s ease;
+    }
+    .guide-card:hover {
+      border-color: var(--secondary-color);
+      box-shadow: 0 10px 30px rgba(157, 78, 221, 0.2);
+    }
+    .guide-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .element-row, .modality-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(157, 78, 221, 0.15);
+    }
+    .element-row:last-child, .modality-row:last-child { border-bottom: none; }
+    .element-badge, .modality-badge {
+      flex-shrink: 0;
+      width: 90px;
+      padding: 6px 0;
+      border-radius: 20px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #fff;
+    }
+    .element-badge.fire     { background: linear-gradient(135deg, #e74c3c, #f39c12); }
+    .element-badge.earth    { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+    .element-badge.air      { background: linear-gradient(135deg, #3498db, #1abc9c); }
+    .element-badge.water    { background: linear-gradient(135deg, #2980b9, #8e44ad); }
+    .modality-badge.cardinal { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+    .modality-badge.fixed    { background: linear-gradient(135deg, #f39c12, #e67e22); }
+    .modality-badge.mutable  { background: linear-gradient(135deg, #1abc9c, #16a085); }
+    .element-signs, .modality-signs {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      background: var(--darker-bg);
+      border-top: 1px solid rgba(157, 78, 221, 0.2);
+      padding: 60px 0 0;
+    }
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .footer-section h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      color: var(--accent-color);
+      margin-bottom: 15px;
+    }
+    .footer-section p,
+    .footer-section li {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+      line-height: 2;
+    }
+    .footer-section ul { list-style: none; }
+    .footer-section a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .footer-section a:hover { color: var(--accent-color); }
+    .social-links { display: flex; gap: 15px; margin-top: 15px; }
+    .social-links a {
+      width: 40px; height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(157, 78, 221, 0.2);
+      color: var(--accent-color);
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+    .social-links a:hover {
+      background: var(--primary-color);
+      color: #fff;
+      transform: translateY(-3px);
+    }
+    .footer-bottom {
+      text-align: center;
+      padding: 25px 20px;
+      margin-top: 40px;
+      border-top: 1px solid rgba(157, 78, 221, 0.15);
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.85rem;
+    }
+    .footer-bottom a {
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+    }
+    .footer-bottom a:hover { color: var(--accent-color); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .menu-toggle { display: flex; }
+      #navbar ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: var(--navbar-height);
+        left: 0; right: 0;
+        background: rgba(16, 0, 43, 0.97);
+        padding: 20px;
+        border-bottom: 1px solid rgba(157, 78, 221, 0.3);
+      }
+      #navbar ul.open { display: flex; }
+      #navbar ul li a { justify-content: center; }
+      .hero h1 { font-size: 2.2rem; }
+      .hero p { font-size: 1rem; }
+      .section-title { font-size: 1.8rem; }
+      .guide-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="#">Mystigraze</a>
+  <canvas class="stars-canvas" id="starsCanvas"></canvas>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <a href="../index.html" class="logo">
+      <i class="fas fa-moon"></i>
+      <span>MysticGraze</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navLinks">
+      <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="horo2.html"><i class="fas fa-star"></i> Horoscope</a></li>
+      <li><a href="learn.html" class="active"><i class="fas fa-book"></i> Learn</a></li>
+      <li><a href="tarot.html"><i class="fas fa-magic"></i> Tarot</a></li>
+      <li><a href="shop.html"><i class="fas fa-shopping-bag"></i> Shop</a></li>
+    </ul>
   </nav>
 
-  <header class="page-header">
-    <div class="container">
-      <h1 class="display-4">Learn Astrology</h1>
-    </div>
-  </header>
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Learn Astrology</h1>
+    <p>Embark on a celestial journey through the ancient wisdom of the stars, planets, and the cosmos that shapes your destiny.</p>
+    <div class="zodiac-symbols">♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓</div>
+  </section>
 
-  <section class="py-5 bg-light">
+  <!-- Learning Categories -->
+  <section id="categories">
     <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card article-card mb-4">
-            <img src="ar1.jpg" class="card-img-top" alt="Article 1">
-            <div class="card-body">
-              <h5 class="card-title">The Basics of Zodiac Signs</h5>
-              <p class="card-text">Learn about the 12 zodiac signs and their characteristics.</p>
-              <a href="https://www.allure.com/story/zodiac-sign-personality-traits-dates" class="btn btn-primary">Read Article</a>
-            </div>
+      <h2 class="section-title">Explore the Cosmos</h2>
+      <p class="section-subtitle">Choose a path and deepen your celestial knowledge</p>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="icon"><i class="fas fa-sun"></i></div>
+          <h3>The Zodiac Signs</h3>
+          <p>Discover the unique traits, strengths, and stories behind each of the 12 zodiac signs that shape our personalities.</p>
+          <a href="https://www.allure.com/story/zodiac-sign-personality-traits-dates" class="btn-explore">Explore</a>
+        </div>
+        <div class="card">
+          <div class="icon"><i class="fas fa-globe"></i></div>
+          <h3>Planetary Influences</h3>
+          <p>Learn how the movements of planets — from Mercury retrogrades to Jupiter transits — influence your daily life.</p>
+          <a href="#videos" class="btn-explore">Explore</a>
+        </div>
+        <div class="card">
+          <div class="icon"><i class="fas fa-map"></i></div>
+          <h3>Birth Chart Reading</h3>
+          <p>Unlock the secrets of your natal chart — a celestial snapshot of the sky at the exact moment you were born.</p>
+          <a href="#guide" class="btn-explore">Explore</a>
+        </div>
+        <div class="card">
+          <div class="icon"><i class="fas fa-heart"></i></div>
+          <h3>Astrology &amp; Relationships</h3>
+          <p>Explore cosmic compatibility, love languages of the signs, and how the stars guide your romantic connections.</p>
+          <a href="https://www.usatoday.com/story/news/2023/01/25/can-astrology-determine-relationship-longevity/11075471002/" class="btn-explore">Explore</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Articles -->
+  <section id="articles">
+    <div class="container">
+      <h2 class="section-title">Featured Articles</h2>
+      <p class="section-subtitle">Curated reads to expand your astrological horizons</p>
+      <div class="articles-grid">
+        <div class="article-card">
+          <img src="ar1.jpg" alt="Zodiac Signs Article">
+          <div class="card-body">
+            <h3>The Basics of Zodiac Signs</h3>
+            <p>Learn about the 12 zodiac signs and their characteristics.</p>
+            <a href="https://www.allure.com/story/zodiac-sign-personality-traits-dates" class="btn-explore">Read Article</a>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="card article-card mb-4">
-            <img src="ar2.jpg" class="card-img-top" alt="Article 2">
-            <div class="card-body">
-              <h5 class="card-title">Astrology and Relationships</h5>
-              <p class="card-text">Discover how astrology can help you navigate relationships.</p>
-              <a href="https://www.usatoday.com/story/news/2023/01/25/can-astrology-determine-relationship-longevity/11075471002/" class="btn btn-primary">Read Article</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card video-card mb-4">
-            <iframe src="https://www.youtube.com/embed/HBgjwWXxaBg?si=wKPNq0w6ZERCy4yf" frameborder="0" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card video-card mb-4">
-            <iframe src="https://www.youtube.com/embed/LGfqQ_Oe3Oo?si=B1IY4x4nuR-aU3VI" frameborder="0" allowfullscreen></iframe>
+        <div class="article-card">
+          <img src="ar2.jpg" alt="Astrology Relationships Article">
+          <div class="card-body">
+            <h3>Astrology and Relationships</h3>
+            <p>Discover how astrology can help you navigate relationships.</p>
+            <a href="https://www.usatoday.com/story/news/2023/01/25/can-astrology-determine-relationship-longevity/11075471002/" class="btn-explore">Read Article</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <footer class="bg-dark text-white py-3">
+  <!-- Video Tutorials -->
+  <section id="videos">
     <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <p>© 2024 Mystigraze. All rights reserved.</p>
+      <h2 class="section-title">Video Tutorials</h2>
+      <p class="section-subtitle">Watch and learn from expert astrologers</p>
+      <div class="videos-grid">
+        <div class="video-card">
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/HBgjwWXxaBg" title="Astrology Tutorial 1" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="video-info">
+            <h3>Introduction to Astrology</h3>
+          </div>
         </div>
-        <div class="col-md-6">
-          <ul class="list-inline text-md-right">
-            <li class="list-inline-item"><a href="../index.html" class="text-white">Home</a></li>
-            <li class="list-inline-item"><a href="#" class="text-white">Terms of Service</a></li>
-            <li class="list-inline-item"><a href="#" class="text-white">Privacy Policy</a></li>
-            <li class="list-inline-item"><a href="#" class="text-white">Contact</a></li>
-          </ul>
+        <div class="video-card">
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/LGfqQ_Oe3Oo" title="Astrology Tutorial 2" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="video-info">
+            <h3>Understanding Your Birth Chart</h3>
+          </div>
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- Beginner's Guide -->
+  <section id="guide">
+    <div class="container">
+      <h2 class="section-title">Beginner's Guide</h2>
+      <p class="section-subtitle">The building blocks of astrological knowledge</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <h3><i class="fas fa-fire"></i> The Four Elements</h3>
+          <div class="element-row">
+            <span class="element-badge fire">🔥 Fire</span>
+            <span class="element-signs">Aries, Leo, Sagittarius — Passionate, energetic, and bold</span>
+          </div>
+          <div class="element-row">
+            <span class="element-badge earth">🌍 Earth</span>
+            <span class="element-signs">Taurus, Virgo, Capricorn — Grounded, practical, and reliable</span>
+          </div>
+          <div class="element-row">
+            <span class="element-badge air">💨 Air</span>
+            <span class="element-signs">Gemini, Libra, Aquarius — Intellectual, social, and communicative</span>
+          </div>
+          <div class="element-row">
+            <span class="element-badge water">🌊 Water</span>
+            <span class="element-signs">Cancer, Scorpio, Pisces — Intuitive, emotional, and deep</span>
+          </div>
+        </div>
+        <div class="guide-card">
+          <h3><i class="fas fa-sync-alt"></i> The Three Modalities</h3>
+          <div class="modality-row">
+            <span class="modality-badge cardinal">Cardinal</span>
+            <span class="modality-signs">Aries, Cancer, Libra, Capricorn — Initiators and leaders who start new seasons</span>
+          </div>
+          <div class="modality-row">
+            <span class="modality-badge fixed">Fixed</span>
+            <span class="modality-signs">Taurus, Leo, Scorpio, Aquarius — Stabilizers who sustain and persevere</span>
+          </div>
+          <div class="modality-row">
+            <span class="modality-badge mutable">Mutable</span>
+            <span class="modality-signs">Gemini, Virgo, Sagittarius, Pisces — Adaptors who embrace change and transition</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3><i class="fas fa-moon"></i> MysticGraze</h3>
+        <p>Your gateway to cosmic wisdom and celestial guidance.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="horo2.html">Horoscope</a></li>
+          <li><a href="tarot.html">Tarot Reading</a></li>
+          <li><a href="learn.html">Learn Astrology</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Services</h3>
+        <ul>
+          <li><a href="#">Birth Chart Analysis</a></li>
+          <li><a href="#">Compatibility Reports</a></li>
+          <li><a href="#">Personalized Readings</a></li>
+          <li><a href="shop.html">Shop</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <ul>
+          <li><i class="fas fa-envelope"></i> info@mysticgraze.com</li>
+          <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+          <li><i class="fas fa-map-marker-alt"></i> Cosmic Realm</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 MysticGraze. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
   </footer>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+  <script>
+    // Starry background
+    (function () {
+      var canvas = document.getElementById('starsCanvas');
+      var ctx = canvas.getContext('2d');
+      var stars = [];
+      var COUNT = 200;
 
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.document.documentElement.scrollHeight;
+      }
+
+      function init() {
+        resize();
+        stars = [];
+        for (var i = 0; i < COUNT; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5 + 0.5,
+            a: Math.random(),
+            d: Math.random() * 0.02 + 0.005
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < stars.length; i++) {
+          var s = stars[i];
+          s.a += s.d;
+          var opacity = 0.3 + Math.abs(Math.sin(s.a)) * 0.7;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(224,170,255,' + opacity + ')';
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+
+      init();
+      draw();
+      window.addEventListener('resize', init);
+    })();
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', function () {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Mobile menu toggle
+    document.getElementById('menuToggle').addEventListener('click', function () {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+  </script>
+</body>
 </html>
